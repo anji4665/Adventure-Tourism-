@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Stackly Adventure Tourism</title>
+    <meta name="description" content="Get in touch with Stackly Adventure Tourism. Plan your next adventure or ask us anything — we reply within 24 hours.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --color-primary: #FF6B35; --color-primary-light: #FF8F65; --color-primary-dark: #E04D1A;
+        --color-secondary: #1B2A4A; --color-accent: #00D4AA;
+        --gradient-primary: linear-gradient(135deg, #FF6B35 0%, #FF3CAC 50%, #784BA0 100%);
+        --gradient-hero: linear-gradient(135deg, #FF6B35 0%, #FF9A3C 30%, #FF3CAC 70%, #784BA0 100%);
+        --gradient-dark: linear-gradient(135deg, #0A0F1C 0%, #1B2A4A 50%, #0D1B2A 100%);
+        --gradient-card: linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+        --color-bg: #0A0F1C; --color-bg-alt: #0F1628;
+        --color-text: #E8ECF4; --color-text-muted: #8892A8; --color-text-dim: #5A6480;
+        --color-border: rgba(255, 255, 255, 0.08); --color-border-light: rgba(255, 255, 255, 0.15);
+        --font-heading: 'Outfit', sans-serif; --font-body: 'Space Grotesk', sans-serif;
+        --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem; --space-lg: 1.5rem;
+        --space-xl: 2rem; --space-2xl: 3rem; --space-3xl: 4rem; --space-4xl: 6rem; --space-5xl: 8rem;
+        --radius-md: 0.75rem; --radius-lg: 1rem; --radius-xl: 1.5rem; --radius-full: 50%;
+        --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+        --transition-fast: 0.2s var(--ease-out); --transition-normal: 0.4s var(--ease-out); --transition-slow: 0.6s var(--ease-out);
+        --shadow-glow: 0 0 40px rgba(255,107,53,0.3);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; font-size: 16px; }
+    body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-text); line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; transition: color var(--transition-fast); }
+    ul { list-style: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-xl); }
+    .gradient-text { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: var(--space-md) 0; transition: all var(--transition-normal); }
+    .navbar.scrolled { background: rgba(10, 15, 28, 0.85); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--color-border); padding: var(--space-sm) 0; }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-xl); display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: var(--space-sm); font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; z-index: 1001; }
+    .logo-img { height: 42px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: var(--space-xl); }
+    .nav-link { font-size: 0.9rem; font-weight: 500; color: var(--color-text-muted); position: relative; padding: var(--space-xs) 0; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--gradient-primary); border-radius: 2px; transition: width var(--transition-normal); }
+    .nav-link:hover, .nav-link.active { color: var(--color-text); }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+    .nav-cta { background: var(--gradient-primary); color: white; padding: 0.6rem 1.5rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.88rem; transition: all var(--transition-fast); box-shadow: var(--shadow-glow); }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(255,107,53,0.45); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: var(--space-sm); z-index: 1001; }
+    .toggle-bar { width: 24px; height: 2.5px; background: var(--color-text); border-radius: 2px; transition: all var(--transition-fast); transform-origin: center; }
+
+    .page-header { padding: 180px 0 80px; text-align: center; position: relative; overflow: hidden; background: var(--gradient-dark); }
+    .page-header::before { content: ''; position: absolute; top: -50%; left: -20%; width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(255,107,53,0.15) 0%, transparent 60%); pointer-events: none; }
+    .page-header::after { content: ''; position: absolute; bottom: -50%; right: -20%; width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(120,75,160,0.12) 0%, transparent 60%); pointer-events: none; }
+    .page-header .container { position: relative; z-index: 2; }
+    .page-header h1 { font-family: var(--font-heading); font-size: clamp(2.4rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: var(--space-md); letter-spacing: -0.02em; }
+    .page-header p { font-size: 1.1rem; color: var(--color-text-muted); max-width: 600px; margin: 0 auto; }
+
+    .btn { display: inline-flex; align-items: center; gap: var(--space-sm); padding: 0.9rem 2rem; border-radius: var(--radius-md); font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; transition: all var(--transition-fast); }
+    .btn-primary { background: var(--gradient-primary); color: white; box-shadow: var(--shadow-glow); position: relative; overflow: hidden; }
+    .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-fast); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 60px rgba(255,107,53,0.5); }
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-full { width: 100%; justify-content: center; }
+
+    .section { padding: var(--space-5xl) 0; }
+    .section-tag { display: inline-block; background: rgba(255,107,53,0.1); color: var(--color-primary-light); padding: 0.35rem 1rem; border-radius: 50px; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: var(--space-md); border: 1px solid rgba(255,107,53,0.2); }
+    .section-title { font-family: var(--font-heading); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: var(--space-md); }
+
+    /* Contact */
+    .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--space-4xl); align-items: start; }
+    .contact-info > p { color: var(--color-text-muted); margin-bottom: var(--space-2xl); line-height: 1.75; }
+    .contact-details { display: flex; flex-direction: column; gap: var(--space-lg); margin-bottom: var(--space-2xl); }
+    .contact-item { display: flex; align-items: flex-start; gap: var(--space-md); }
+    .contact-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+    .contact-item strong { display: block; font-size: 0.88rem; margin-bottom: 2px; }
+    .contact-item span { font-size: 0.85rem; color: var(--color-text-muted); }
+    .social-links { display: flex; gap: var(--space-md); }
+    .social-link { width: 42px; height: 42px; border: 1px solid var(--color-border-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); transition: all var(--transition-fast); }
+    .social-link:hover { background: var(--gradient-primary); border-color: transparent; color: white; transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+
+    .contact-form { padding: var(--space-2xl); background: var(--gradient-card); border: 1px solid var(--color-border); border-radius: var(--radius-xl); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+    .form-group { margin-bottom: var(--space-lg); }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: var(--space-sm); color: var(--color-text); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        transition: all var(--transition-fast);
+        outline: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--color-text-dim); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--color-primary);
+        background: rgba(255,107,53,0.04);
+        box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+    }
+    .form-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238892A8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+    }
+    .form-group select option { background: #151D30; color: var(--color-text); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-error { color: #FF3B30; font-size: 0.78rem; margin-top: 4px; display: none; }
+    .form-group.has-error input,
+    .form-group.has-error select,
+    .form-group.has-error textarea { border-color: #FF3B30; }
+    .form-group.has-error .form-error { display: block; }
+    .form-hint { display: block; font-size: 0.72rem; color: var(--color-text-dim); margin-top: 4px; }
+    .form-success { display: none; padding: var(--space-md) var(--space-lg); background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); border-radius: var(--radius-md); color: var(--color-accent); font-size: 0.9rem; margin-bottom: var(--space-lg); text-align: center; }
+    .form-success.visible { display: block; }
+
+    /* Map */
+    .map-placeholder { width: 100%; height: 340px; border-radius: var(--radius-xl); overflow: hidden; background: var(--gradient-card); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center; text-align: center; padding: var(--space-xl); margin-top: var(--space-4xl); cursor: pointer; color: inherit; text-decoration: none; transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast); }
+    .map-placeholder:hover { border-color: rgba(255,107,53,0.45); transform: translateY(-4px); box-shadow: var(--shadow-glow); }
+    .map-placeholder svg { color: var(--color-primary-light); margin: 0 auto var(--space-md); }
+    .map-placeholder p { font-size: 1.05rem; font-weight: 600; }
+    .map-placeholder small { font-size: 0.85rem; color: var(--color-text-muted); }
+
+    /* Footer */
+    .footer { background: var(--color-bg-alt); border-top: 1px solid var(--color-border); padding: var(--space-4xl) 0 var(--space-xl); }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: var(--space-2xl); margin-bottom: var(--space-3xl); }
+    .footer-brand p { color: var(--color-text-muted); font-size: 0.88rem; line-height: 1.7; margin-top: var(--space-md); max-width: 280px; }
+    /* FIX: keep the footer logo link shrink-wrapped to the logo so the empty
+       space to its right is NOT clickable */
+    .footer-brand .nav-logo { display: inline-flex; width: fit-content; max-width: max-content; }
+    .footer-col h4 { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; margin-bottom: var(--space-lg); }
+    .footer-col ul { display: flex; flex-direction: column; gap: var(--space-sm); }
+    .footer-col a { font-size: 0.85rem; color: var(--color-text-muted); }
+    .footer-col a:hover { color: var(--color-primary-light); }
+    .footer-contact li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; line-height: 1.6; }
+    .footer-contact svg { flex-shrink: 0; margin-top: 3px; color: var(--color-primary-light); }
+    .footer-contact a, .footer-contact span { color: var(--color-text-muted); }
+    .footer-contact a:hover { color: var(--color-primary-light); }
+    .footer-bottom { border-top: 1px solid var(--color-border); padding-top: var(--space-xl); display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: var(--color-text-dim); }
+    .footer-socials { display: flex; gap: var(--space-md); margin-top: var(--space-lg); }
+    .footer-social { width: 40px; height: 40px; border: 1px solid var(--color-border-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); transition: all var(--transition-fast); }
+    .footer-social:hover { background: var(--gradient-primary); border-color: transparent; color: white; transform: translateY(-3px); }
+
+    [data-anim] { opacity: 0; transform: translateY(40px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+    [data-anim].in-view { opacity: 1; transform: translateY(0); }
+    [data-anim][data-delay="1"] { transition-delay: 0.1s; }
+
+    @media (max-width: 1024px) {
+        .contact-wrapper { grid-template-columns: 1fr; gap: var(--space-2xl); }
+        .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-2xl); }
+    }
+    @media (max-width: 768px) {
+        html { font-size: 15px; }
+        .container, .nav-container { padding: 0 var(--space-lg); }
+        .section { padding: var(--space-3xl) 0; }
+        .navbar, .navbar.scrolled { backdrop-filter: none; -webkit-backdrop-filter: none; }
+        .navbar.scrolled { background: rgba(10,15,28,0.96); border-bottom: 1px solid var(--color-border); padding: var(--space-sm) 0; }
+        .nav-links { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100vh; height: 100dvh; padding: 96px var(--space-lg) var(--space-2xl); background: radial-gradient(ellipse at top right, rgba(255,107,53,0.10) 0%, transparent 55%), radial-gradient(ellipse at bottom left, rgba(120,75,160,0.12) 0%, transparent 55%), linear-gradient(160deg, #0A0F1C 0%, #121A2E 55%, #0A0F1C 100%); flex-direction: column; justify-content: center; align-items: center; gap: var(--space-lg); opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-14px); transition: opacity 0.32s ease, transform 0.32s ease, visibility 0.32s ease; z-index: 999; overflow-y: auto; }
+        .nav-links.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+        .nav-links li { width: 100%; text-align: center; opacity: 0; transform: translateY(18px); transition: opacity 0.35s ease, transform 0.35s ease; }
+        .nav-links.open li { opacity: 1; transform: translateY(0); }
+        .nav-links.open li:nth-child(1) { transition-delay: 0.06s; }
+        .nav-links.open li:nth-child(2) { transition-delay: 0.12s; }
+        .nav-links.open li:nth-child(3) { transition-delay: 0.18s; }
+        .nav-links.open li:nth-child(4) { transition-delay: 0.24s; }
+        .nav-links.open li:nth-child(5) { transition-delay: 0.30s; }
+        .nav-link { display: inline-block; font-size: 1.5rem; font-family: var(--font-heading); font-weight: 700; padding: var(--space-xs) var(--space-md); }
+        .nav-cta { display: none; }
+        .nav-toggle { display: flex; margin-right: -14px; padding: var(--space-sm) var(--space-xs) var(--space-sm) var(--space-sm); }
+        .nav-toggle.active .toggle-bar:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav-toggle.active .toggle-bar:nth-child(2) { opacity: 0; }
+        .nav-toggle.active .toggle-bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .page-header { padding: 130px 0 60px; }
+        .form-row { grid-template-columns: 1fr; }
+        .contact-form { padding: var(--space-lg); }
+        .footer-grid { grid-template-columns: 1fr; gap: var(--space-xl); }
+        .footer-bottom { flex-direction: column; gap: var(--space-sm); text-align: center; }
+        .logo-img { height: 36px; }
+    }
+    @media (max-width: 420px) {
+        html { font-size: 14px; }
+        .container, .nav-container { padding: 0 var(--space-md); }
+        .nav-links { padding: 88px var(--space-md) var(--space-xl); gap: var(--space-md); }
+        .nav-link { font-size: 1.3rem; }
+        .nav-toggle { margin-right: -16px; }
+    }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo" aria-label="Stackly — Home"><img src="images/Stackly_logo.webp" alt="Stackly" class="logo-img"></a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="adventures.html" class="nav-link">Adventures</a></li>
+                <li><a href="destinations.html" class="nav-link">Destinations</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+                <li><a href="login.html" class="nav-link">Login</a></li>
+            </ul>
+            <a href="contact.html" class="nav-cta">Book Now</a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle mobile menu">
+                <span class="toggle-bar"></span><span class="toggle-bar"></span><span class="toggle-bar"></span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <span class="section-tag" data-anim="fade-up">Get in Touch</span>
+            <h1 data-anim="fade-up">Let's Plan Your <span class="gradient-text">Adventure</span></h1>
+            <p data-anim="fade-up">Fill in the form below and our adventure specialists will craft your perfect trip within 24 hours.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="contact-wrapper">
+                <!-- LEFT -->
+                <div class="contact-info" data-anim="fade-up">
+                    <span class="section-tag">Contact Us</span>
+                    <h2 class="section-title">We're <span class="gradient-text">Here</span> for You</h2>
+                    <p>Whether you're planning your first adventure or your fiftieth, our team is ready to help you craft something unforgettable.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <div>
+                                <strong>Headquarters</strong>
+                                <span>MMR Complex, Salem, Tamil Nadu 636008</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <div>
+                                <strong>Call Us</strong>
+                                <span>+91 62811 15858</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <div>
+                                <strong>Email</strong>
+                                <span>hello@stacklyadventure.com</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">🕐</span>
+                            <div>
+                                <strong>Hours</strong>
+                                <span>Mon–Fri: 9AM – 6PM · Sat–Sun: Closed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="404.html" class="social-link" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </a>
+                        <a href="404.html" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                        </a>
+                        <a href="404.html" class="social-link" aria-label="YouTube">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.43z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                        </a>
+                        <a href="404.html" class="social-link" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- RIGHT -->
+                <form class="contact-form" id="contact-form" data-anim="fade-up" data-delay="1" novalidate>
+                    <div class="form-success" id="form-success">✅ Thank you! Your enquiry has been sent. We'll be in touch within 24 hours.</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="form-name">Full Name *</label>
+                            <input type="text" id="form-name" name="name" placeholder="John Doe"
+                                   pattern="[A-Za-z ]+" maxlength="60" autocomplete="name"
+                                   title="Letters and spaces only" required>
+                            <span class="form-error">Please enter your name (letters only).</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-email">Email Address *</label>
+                            <input type="email" id="form-email" name="email" placeholder="john@gmail.com"
+                                   pattern="^[^\s@]+@gmail\.com$" autocomplete="email"
+                                   title="Email must end with @gmail.com" required>
+                            <span class="form-error">Email must be a valid @gmail.com address.</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="form-phone">Phone</label>
+                            <input type="tel" id="form-phone" name="phone" placeholder="9876543210"
+                                   inputmode="numeric" pattern="[0-9]*" maxlength="15"
+                                   autocomplete="tel" title="Numbers only">
+                            <span class="form-error">Phone number can contain digits only.</span>
+                            <small class="form-hint">Digits only — no spaces, + or symbols.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-adventure">Adventure Interest *</label>
+                            <select id="form-adventure" name="adventure" required>
+                                <option value="" disabled selected>Select an adventure</option>
+                                <option value="rafting">White Water Rafting</option>
+                                <option value="climbing">Rock Climbing</option>
+                                <option value="bungee">Bungee Jumping</option>
+                                <option value="trekking">Mountain Trekking</option>
+                                <option value="camping">Glamping & Camping</option>
+                                <option value="paragliding">Paragliding</option>
+                                <option value="custom">Custom Trip</option>
+                            </select>
+                            <span class="form-error">Please select an adventure.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-message">Your Message *</label>
+                        <textarea id="form-message" name="message" rows="5" placeholder="Tell us about your dream adventure, dates, group size..." required></textarea>
+                        <span class="form-error">Please enter a message.</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" id="form-submit-btn">
+                        <span>Send Enquiry</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- MAP — clickable, opens Google Maps location -->
+            <a class="map-placeholder" data-anim="fade-up"
+               href="https://maps.app.goo.gl/rZc7Fi7D6JRNnvp8A?g_st=ic"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="Open Stackly Adventure Tourism location in Google Maps">
+                <div>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <p>MMR Complex, Salem, Tamil Nadu 636008</p>
+                    <small>Click to open in Google Maps</small>
+                </div>
+            </a>
+        </div>
+    </section>
+     <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo" aria-label="Stackly — Home"><img src="images/Stackly_logo.webp" alt="Stackly" class="logo-img"></a>
+                    <p>Transforming ordinary trips into extraordinary adventures since 2018. Life is either a daring adventure or nothing at all.</p>
+                    <div class="footer-socials">
+                        <a href="404.html" class="footer-social" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+                        <a href="404.html" class="footer-social" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        <a href="404.html" class="footer-social" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.43z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+                        <a href="404.html" class="footer-social" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                    </div>
+                </div>
+                <div class="footer-col"><h4>Adventures</h4><ul>
+                    <li><a href="adventures.html">Rafting</a></li>
+                    <li><a href="adventures.html">Rock Climbing</a></li>
+                    <li><a href="adventures.html">Bungee Jumping</a></li>
+                    <li><a href="adventures.html">Mountain Trekking</a></li>
+                </ul></div>
+                <div class="footer-col"><h4>Company</h4><ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Team</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul></div>
+                <div class="footer-col"><h4>Contact</h4><ul class="footer-contact">
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><a href="https://maps.app.goo.gl/8yMwwCkNPY8b1HDz7" target="_blank" rel="noopener">MMR Complex, Salem, Tamil Nadu 636008</a></li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+916281115858">+91 62811 15858</a></li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:hello@stacklyadventure.com">hello@stacklyadventure.com</a></li>
+                    <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Mon–Fri: 9AM – 6PM, Sat–Sun: Closed</span></li>
+                </ul></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Stackly Adventure Tourism. All rights reserved.</p>
+                <p>Designed with ❤️ for adrenaline junkies worldwide.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mobile nav
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('open');
+            document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+        });
+        navLinks.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // Scroll animations
+        const observerAnim = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observerAnim.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('[data-anim]').forEach(el => observerAnim.observe(el));
+
+        // Form handling
+        const form = document.getElementById('contact-form');
+        const success = document.getElementById('form-success');
+        const submitBtn = document.getElementById('form-submit-btn');
+        const nameInput = document.getElementById('form-name');
+        const emailInput = document.getElementById('form-email');
+        const phoneInput = document.getElementById('form-phone');
+        const adventureSelect = document.getElementById('form-adventure');
+        const messageInput = document.getElementById('form-message');
+
+        /* ---------- INPUT RESTRICTIONS ---------- */
+
+        // Full Name: alphabets (and spaces) only — strips digits & special characters
+        nameInput.addEventListener('input', () => {
+            const cleaned = nameInput.value
+                .replace(/[^A-Za-z\s]/g, '')   // remove anything that isn't a letter or space
+                .replace(/\s{2,}/g, ' ')        // collapse multiple spaces
+                .replace(/^\s+/, '');           // no leading space
+            if (nameInput.value !== cleaned) nameInput.value = cleaned;
+        });
+
+        // Phone: digits only — no letters, no +, no spaces, no symbols
+        phoneInput.addEventListener('input', () => {
+            const cleaned = phoneInput.value.replace(/\D/g, '').slice(0, 15);
+            if (phoneInput.value !== cleaned) phoneInput.value = cleaned;
+        });
+
+        // Block invalid keys outright (extra safety for older browsers)
+        nameInput.addEventListener('keypress', (e) => {
+            if (!/[A-Za-z\s]/.test(e.key)) e.preventDefault();
+        });
+        phoneInput.addEventListener('keypress', (e) => {
+            if (!/[0-9]/.test(e.key)) e.preventDefault();
+        });
+
+        // Email: must end with @gmail.com
+        function isValidEmail(email) {
+            return /^[^\s@]+@gmail\.com$/i.test(email);
+        }
+
+        /* ---------- SUBMIT ---------- */
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            form.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
+            success.classList.remove('visible');
+
+            // Name: required + letters only
+            if (!nameInput.value.trim() || !/^[A-Za-z\s]+$/.test(nameInput.value.trim())) {
+                nameInput.closest('.form-group').classList.add('has-error');
+                isValid = false;
+            }
+
+            // Email: required + must end with @gmail.com
+            if (!emailInput.value.trim() || !isValidEmail(emailInput.value.trim())) {
+                emailInput.closest('.form-group').classList.add('has-error');
+                isValid = false;
+            }
+
+            // Phone (optional) — must be digits only if filled
+            if (phoneInput.value.trim() && !/^\d+$/.test(phoneInput.value.trim())) {
+                phoneInput.closest('.form-group').classList.add('has-error');
+                isValid = false;
+            }
+
+            if (!adventureSelect.value) {
+                adventureSelect.closest('.form-group').classList.add('has-error');
+                isValid = false;
+            }
+
+            if (!messageInput.value.trim()) {
+                messageInput.closest('.form-group').classList.add('has-error');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">Sending...</span>';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+                success.classList.add('visible');
+                form.reset();
+                setTimeout(() => success.classList.remove('visible'), 5000);
+            }, 1500);
+        });
+
+        // Real-time error clearing
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', () => input.closest('.form-group').classList.remove('has-error'));
+            input.addEventListener('change', () => input.closest('.form-group').classList.remove('has-error'));
+        });
+    });
+    </script>
+</body>
+</html>

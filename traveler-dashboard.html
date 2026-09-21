@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Stackly Adventure Tourism — Traveler Dashboard. Manage your treks, expeditions, bookings and account.">
+    <title>Traveler Dashboard | Stackly Adventure Tourism</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           STACKLY ADVENTURE TOURISM — TRAVELER DASHBOARD STYLES
+           Palette: Deep Navy (#0B1426) + Orange (#FF6B35) + White
+           Font: Outfit
+           ============================================================ */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --navy-950:#050a14;--navy-900:#0B1426;--navy-800:#111d38;--navy-700:#17274a;
+            --navy-600:#1e3260;--navy-500:#2a4480;--navy-400:#4a6aa5;--navy-300:#7a96c5;
+            --navy-200:#b0c2df;--navy-100:#dce5f2;--navy-50:#f0f4fa;
+            --orange-50:#fff5ef;--orange-100:#ffe5d4;--orange-200:#ffcba8;--orange-300:#ffaa72;
+            --orange-400:#ff8a47;--orange-500:#FF6B35;--orange-600:#e55a28;--orange-700:#c4461c;
+            --white:#ffffff;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+            --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;
+            --gray-700:#374151;--gray-800:#1f2937;
+            --green-500:#10b981;--green-100:#d1fae5;
+            --amber-500:#f59e0b;--amber-100:#fef3c7;
+            --red-500:#ef4444;--red-100:#fee2e2;
+            --blue-500:#3b82f6;--blue-100:#dbeafe;
+            --purple-500:#8b5cf6;--purple-100:#ede9fe;
+            --bg:#f4f6fa;--card:#ffffff;
+            --shadow-sm:0 1px 3px rgba(11,20,38,.06);
+            --shadow-md:0 4px 16px rgba(11,20,38,.08);
+            --shadow-lg:0 12px 40px rgba(11,20,38,.12);
+            --shadow-glow:0 0 30px rgba(255,107,53,.2);
+            --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;--r-full:9999px;
+            --sidebar-w:264px;--topbar-h:70px;
+            --ease:cubic-bezier(.4,0,.2,1);
+        }
+        html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+        body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--gray-800);display:flex;min-height:100vh;overflow-x:hidden}
+        img{max-width:100%;height:auto;display:block}
+        a{text-decoration:none;color:inherit}
+        button{border:none;background:none;cursor:pointer;font-family:inherit}
+        ul{list-style:none}
+        .text-accent{color:var(--orange-500)}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+
+        /* SIDEBAR */
+        .sidebar{
+            width:var(--sidebar-w);min-height:100vh;position:fixed;left:0;top:0;z-index:100;
+            background:linear-gradient(185deg,var(--navy-800) 0%,var(--navy-950) 100%);
+            display:flex;flex-direction:column;transition:transform .35s var(--ease);
+            overflow-y:auto;overflow-x:hidden;
+        }
+        .sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:22px 20px 12px}
+        .sidebar-logo{display:flex;align-items:center;gap:10px}
+        .logo-img{height:38px;width:auto;object-fit:contain;}
+        .sidebar-close{display:none;color:rgba(255,255,255,.5);padding:4px;transition:color .2s}
+        .sidebar-close:hover{color:#fff}
+        .sidebar-profile{display:flex;align-items:center;gap:12px;padding:14px 20px;margin:4px 12px 16px;background:rgba(255,255,255,.06);border-radius:var(--r-md);border:1px solid rgba(255,255,255,.05)}
+        .sidebar-avatar{width:48px;height:48px;border-radius:var(--r-full);object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+        .sidebar-username{font-size:.88rem;font-weight:600;color:#fff}
+        .sidebar-badge{font-size:.65rem;font-weight:700;color:var(--orange-400);background:rgba(255,107,53,.12);padding:2px 10px;border-radius:var(--r-full);margin-top:4px;display:inline-block;letter-spacing:.4px;text-transform:uppercase}
+        .sidebar-nav{flex:1;padding:0 12px}
+        .nav-group-label{display:block;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1.5px;padding:16px 16px 8px;margin-top:4px}
+        .nav-item{margin-bottom:1px}
+        .nav-link{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:var(--r-sm);color:rgba(255,255,255,.55);font-size:.86rem;font-weight:500;transition:all .2s var(--ease);position:relative;cursor:pointer}
+        .nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+        .nav-item.active .nav-link{background:rgba(255,107,53,.12);color:var(--orange-400);font-weight:600}
+        .nav-item.active .nav-link::before{content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:3px;height:22px;background:var(--orange-500);border-radius:0 4px 4px 0}
+        .nav-icon{width:19px;height:19px;flex-shrink:0}
+        .nav-count{margin-left:auto;background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:var(--r-full);min-width:20px;text-align:center}
+        .nav-count.orange{background:var(--orange-500);color:#fff}
+        .nav-logout{color:rgba(255,100,100,.6)}.nav-logout:hover{color:#ff7878;background:rgba(255,100,100,.1)}
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:99;opacity:0;transition:opacity .35s var(--ease)}
+        .sidebar-overlay.active{display:block;opacity:1}
+
+        /* MAIN CONTENT */
+        .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .35s var(--ease)}
+
+        /* TOP BAR */
+        .topbar{height:var(--topbar-h);background:var(--card);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50;box-shadow:var(--shadow-sm)}
+        .topbar-left{display:flex;align-items:center;gap:16px}
+        .topbar-right{display:flex;align-items:center;gap:12px}
+        .hamburger{display:none;flex-direction:column;gap:5px;padding:8px;border-radius:var(--r-sm)}
+        .hamburger:hover{background:var(--gray-100)}
+        .hamburger span{display:block;width:22px;height:2.5px;background:var(--gray-700);border-radius:2px;transition:all .3s var(--ease)}
+        .greeting-title{font-size:1.1rem;font-weight:700;color:var(--navy-900)}
+        .greeting-sub{font-size:.78rem;color:var(--gray-500);margin-top:1px}
+        .search-box{position:relative;display:flex;align-items:center}
+        .search-icon{width:17px;height:17px;position:absolute;left:13px;color:var(--gray-400)}
+        .search-input{width:240px;padding:9px 14px 9px 38px;border:1.5px solid var(--gray-200);border-radius:var(--r-full);font-size:.82rem;font-family:inherit;color:var(--gray-800);background:var(--gray-50);outline:none;transition:all .2s var(--ease)}
+        .search-input::placeholder{color:var(--gray-400)}
+        .search-input:focus{border-color:var(--orange-400);box-shadow:0 0 0 3px rgba(255,107,53,.1);background:#fff}
+        .topbar-icon-btn{width:40px;height:40px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;background:var(--gray-50);border:1.5px solid var(--gray-200);transition:all .2s;position:relative}
+        .topbar-icon-btn svg{width:19px;height:19px;color:var(--gray-600)}
+        .topbar-icon-btn:hover{background:var(--orange-50);border-color:var(--orange-200)}
+        .topbar-icon-btn:hover svg{color:var(--orange-600)}
+        .notif-badge{position:absolute;top:-3px;right:-3px;width:18px;height:18px;background:var(--orange-500);color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;animation:pulseBadge 2s infinite}
+        @keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.35)}50%{box-shadow:0 0 0 6px rgba(255,107,53,0)}}
+        .topbar-profile{width:36px;height:36px;border-radius:var(--r-full);overflow:hidden;border:2px solid var(--orange-200);cursor:pointer;transition:border-color .2s}
+        .topbar-profile:hover{border-color:var(--orange-500)}
+        .topbar-profile img{width:100%;height:100%;object-fit:cover}
+
+        /* LOGOUT BUTTON HEADER */
+        .header-logout-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            transition: all .2s;
+            position: relative;
+            margin-left: 4px;
+        }
+        .header-logout-btn svg {
+            width: 19px;
+            height: 19px;
+            color: var(--gray-600);
+            transition: color .2s;
+        }
+        .header-logout-btn:hover {
+            background: #fee2e2;
+            border-color: #fecaca;
+        }
+        .header-logout-btn:hover svg {
+            color: var(--red-500);
+        }
+
+        /* DASHBOARD BODY */
+        .dashboard-body{flex:1;padding:28px}
+
+        /* PAGE SECTIONS */
+        .page-section{display:none;animation:fadeUp .5s var(--ease)}
+        .page-section.active{display:block}
+        .page-title{font-size:1.5rem;font-weight:700;color:var(--navy-900);margin-bottom:6px}
+        .page-subtitle{font-size:.85rem;color:var(--gray-500);margin-bottom:24px}
+        .empty-state{text-align:center;padding:40px 20px;color:var(--gray-400)}
+        .empty-state svg{width:60px;height:60px;margin-bottom:16px;opacity:.5}
+        .empty-state h3{font-size:1.1rem;color:var(--gray-600);margin-bottom:8px}
+        .empty-state p{font-size:.85rem;color:var(--gray-400)}
+
+        /* WELCOME BANNER */
+        .welcome-banner{background:linear-gradient(135deg,var(--navy-900) 0%,var(--navy-700) 50%,var(--navy-600) 100%);border-radius:var(--r-xl);padding:36px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);animation:fadeUp .6s var(--ease)}
+        .welcome-banner::before{content:'';position:absolute;top:-60%;right:-15%;width:450px;height:450px;background:radial-gradient(circle,rgba(255,107,53,.1) 0%,transparent 70%);border-radius:50%}
+        .welcome-banner::after{content:'';position:absolute;bottom:-40%;left:5%;width:300px;height:300px;background:radial-gradient(circle,rgba(42,68,128,.2) 0%,transparent 70%);border-radius:50%}
+        .welcome-left{position:relative;z-index:1;flex:1}
+        .welcome-tag{display:inline-block;background:rgba(255,107,53,.15);color:var(--orange-400);font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:var(--r-full);margin-bottom:16px;letter-spacing:.5px}
+        .welcome-heading{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.35}
+        .welcome-heading strong{color:var(--orange-400)}
+        .welcome-sub{font-size:.88rem;color:rgba(255,255,255,.55);margin-bottom:24px;line-height:1.6}
+        .welcome-sub strong{color:rgba(255,255,255,.85)}
+        .welcome-actions{display:flex;gap:12px;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--r-full);font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all .3s var(--ease);border:2px solid transparent;white-space:nowrap}
+        .btn svg{width:17px;height:17px}
+        .btn-accent{background:var(--orange-500);color:#fff;border-color:var(--orange-500)}
+        .btn-accent:hover{background:var(--orange-600);border-color:var(--orange-600);transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+        .btn-outline{border-color:rgba(255,255,255,.3);color:#fff}.btn-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+        .welcome-right{position:relative;z-index:1;flex-shrink:0}
+        .welcome-car{width:340px;border-radius:var(--r-lg);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:transform .4s var(--ease)}
+        .welcome-banner:hover .welcome-car{transform:scale(1.03) translateY(-4px)}
+        .welcome-float{position:absolute;background:rgba(255,255,255,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:10px 16px;color:#fff;display:flex;align-items:center;gap:10px;z-index:2;animation:floatCard 4s ease-in-out infinite}
+        .welcome-float svg{width:18px;height:18px;color:var(--orange-400);flex-shrink:0}
+        .welcome-float.fuel{bottom:20px;left:-20px}
+        .welcome-float.km{top:20px;right:-10px;animation-delay:2s}
+        .float-val{font-size:1.05rem;font-weight:800;display:block;color:var(--orange-300)}
+        .float-lbl{font-size:.65rem;color:rgba(255,255,255,.45);display:block}
+        @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+        /* STATS ROW */
+        .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
+        .stat-card{background:var(--card);border-radius:var(--r-lg);padding:22px;display:flex;align-items:flex-start;gap:16px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-100);transition:all .3s var(--ease);animation:fadeUp .6s var(--ease) both}
+        .stat-card:nth-child(1){animation-delay:.1s}.stat-card:nth-child(2){animation-delay:.2s}.stat-card:nth-child(3){animation-delay:.3s}.stat-card:nth-child(4){animation-delay:.4s}
+        .stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+        .stat-icon{width:48px;height:48px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .stat-icon svg{width:22px;height:22px}
+        .stat-icon.orange-bg{background:var(--orange-50);color:var(--orange-600)}.stat-icon.orange-bg svg{stroke:var(--orange-600)}
+        .stat-icon.navy-bg{background:var(--navy-50);color:var(--navy-600)}.stat-icon.navy-bg svg{stroke:var(--navy-600)}
+        .stat-icon.green-bg{background:var(--green-100);color:var(--green-500)}.stat-icon.green-bg svg{stroke:var(--green-500)}
+        .stat-icon.purple-bg{background:var(--purple-100);color:var(--purple-500)}.stat-icon.purple-bg svg{stroke:var(--purple-500)}
+        .stat-data{flex:1}
+        .stat-num{font-size:1.8rem;font-weight:800;color:var(--navy-900);line-height:1}
+        .stat-num-prefix{font-size:1.1rem;font-weight:700;color:var(--navy-900)}
+        .stat-label{font-size:.76rem;color:var(--gray-500);font-weight:500;display:block;margin-top:4px}
+        .stat-trend{display:flex;align-items:center;gap:4px;font-size:.7rem;font-weight:700;margin-top:8px;align-self:flex-end}
+        .stat-trend svg{width:14px;height:14px}
+        .stat-trend.up{color:var(--green-500)}.stat-trend.neutral{color:var(--gray-400)}.stat-trend.down{color:var(--red-500)}
+
+        /* DASHBOARD GRID */
+        .dash-grid{display:grid;grid-template-columns:1fr 370px;gap:24px}
+
+        /* CARDS */
+        .card{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);border:1px solid var(--gray-100);overflow:hidden;animation:fadeUp .6s var(--ease) .3s both}
+        .card-head{display:flex;align-items:flex-start;justify-content:space-between;padding:20px 24px 0;gap:12px}
+        .card-title{font-size:1rem;font-weight:700;color:var(--navy-900)}
+        .card-subtitle{font-size:.75rem;color:var(--gray-500);margin-top:2px}
+        .card-content{padding:16px 24px 24px}
+        .card-filter{padding:6px 12px;border:1.5px solid var(--gray-200);border-radius:var(--r-sm);font-size:.78rem;font-family:inherit;color:var(--gray-600);background:var(--gray-50);cursor:pointer;outline:none;transition:border-color .2s}
+        .card-filter:focus{border-color:var(--orange-400)}
+        .see-all{font-size:.8rem;font-weight:600;color:var(--orange-500);white-space:nowrap;transition:color .2s;padding-top:2px}
+        .see-all:hover{color:var(--orange-700)}
+
+        /* BOOKING ITEMS */
+        .booking-item{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--gray-100);transition:all .2s var(--ease);position:relative}
+        .booking-item:last-child{border-bottom:none;padding-bottom:0}
+        .booking-item:first-child{padding-top:0}
+        .booking-date-col{width:54px;height:58px;background:linear-gradient(135deg,var(--navy-700),var(--navy-900));border-radius:var(--r-md);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;color:#fff;box-shadow:0 3px 8px rgba(11,20,38,.2)}
+        .booking-date-col.orange-date{background:linear-gradient(135deg,var(--orange-500),var(--orange-700))}
+        .booking-date-col.green-date{background:linear-gradient(135deg,var(--green-500),#059669)}
+        .booking-date-col.heart-col{background:linear-gradient(135deg,#ef4444,#b91c1c);display:flex;align-items:center;justify-content:center}
+        .booking-day{font-size:1.2rem;font-weight:800;line-height:1}
+        .booking-month{font-size:.6rem;font-weight:700;letter-spacing:1px;opacity:.8;margin-top:2px}
+        .booking-thumb{width:90px;height:62px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;background:var(--gray-100)}
+        .booking-thumb img{width:100%;height:100%;object-fit:cover}
+        .booking-info{flex:1;min-width:0}
+        .booking-name{font-size:.92rem;font-weight:700;color:var(--navy-900);margin-bottom:4px}
+        .booking-meta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+        .booking-meta span{display:flex;align-items:center;gap:4px;font-size:.74rem;color:var(--gray-500)}
+        .booking-meta svg{width:13px;height:13px;flex-shrink:0}
+        .booking-tags{display:flex;gap:5px;flex-wrap:wrap}
+        .tag{font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:var(--r-full);letter-spacing:.3px}
+        .tag.confirmed{background:var(--green-100);color:var(--green-500)}
+        .tag.pending{background:var(--amber-100);color:var(--amber-500)}
+        .tag.guided{background:var(--navy-50);color:var(--navy-500)}
+        .tag.camping{background:var(--purple-100);color:var(--purple-500)}
+        .tag.trekking{background:var(--green-100);color:#059669}
+        .tag.high-altitude{background:var(--orange-100);color:var(--orange-700)}
+        .tag.water-sports{background:var(--blue-100);color:var(--blue-500)}
+        .tag.coastal{background:#cffafe;color:#0891b2}
+        .booking-price{text-align:right;flex-shrink:0}
+        .price-amount{font-size:1rem;font-weight:800;color:var(--navy-900);display:block}
+        .price-dur{font-size:.68rem;color:var(--gray-400);display:block;margin-top:2px}
+        .booking-actions{display:flex;gap:5px;flex-shrink:0}
+        .action-btn{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;border:1.5px solid var(--gray-200);background:var(--gray-50);transition:all .2s}
+        .action-btn svg{width:14px;height:14px;color:var(--gray-500)}
+        .action-btn.edit:hover{border-color:var(--orange-300);background:var(--orange-50)}.action-btn.edit:hover svg{color:var(--orange-600)}
+        .action-btn.cancel:hover{border-color:var(--red-500);background:var(--red-100)}.action-btn.cancel:hover svg{color:var(--red-500)}
+        .action-btn.heart:hover{border-color:var(--red-500);background:var(--red-100)}.action-btn.heart:hover svg{color:var(--red-500);fill:var(--red-500)}
+        .action-btn.book:hover{border-color:var(--green-500);background:var(--green-100)}.action-btn.book:hover svg{color:var(--green-500)}
+
+        /* TRANSACTIONS */
+        #transactionsCard{margin-top:20px}
+        .txn-table{display:flex;flex-direction:column}
+        .txn-row{display:grid;grid-template-columns:2fr 1fr 1fr .8fr;gap:12px;padding:12px 0;align-items:center;border-bottom:1px solid var(--gray-100);font-size:.82rem}
+        .txn-row:last-child{border-bottom:none}
+        .txn-header{font-weight:700;color:var(--gray-500);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;padding-bottom:10px}
+        .txn-desc{color:var(--gray-700)}.txn-desc strong{color:var(--navy-900)}
+        .txn-date{color:var(--gray-500);font-size:.78rem}
+        .txn-amount{font-weight:700;color:var(--navy-900)}
+        .txn-status{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:var(--r-full);text-align:center;display:inline-block}
+        .txn-status.paid{background:var(--green-100);color:var(--green-500)}
+        .txn-status.pending-status{background:var(--amber-100);color:var(--amber-500)}
+
+        /* CALENDAR */
+        .cal-nav{display:flex;align-items:center;gap:6px}
+        .cal-btn{width:26px;height:26px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;border:1px solid var(--gray-200);transition:all .2s}
+        .cal-btn svg{width:13px;height:13px;color:var(--gray-500)}
+        .cal-btn:hover{background:var(--orange-50);border-color:var(--orange-200)}
+        .cal-month-label{font-size:.8rem;font-weight:600;color:var(--gray-700);min-width:110px;text-align:center}
+        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+        .cal-hdr{text-align:center;font-size:.65rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;padding:8px 0}
+        .cal-day{text-align:center;padding:7px 4px;font-size:.76rem;font-weight:500;color:var(--gray-700);border-radius:var(--r-sm);cursor:pointer;transition:all .2s;position:relative}
+        .cal-day:hover{background:var(--orange-50);color:var(--orange-600)}
+        .cal-day.today{background:var(--orange-500);color:#fff;font-weight:700}
+        .cal-day.booked::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:5px;height:5px;background:var(--navy-500);border-radius:50%}
+        .cal-day.today.booked::after{background:#fff}
+        .cal-day.active-day{background:var(--orange-100);color:var(--orange-700);font-weight:600}
+        .cal-day.other{color:var(--gray-300)}
+        .cal-legend{display:flex;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--gray-100)}
+        .legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--gray-500);font-weight:500}
+        .legend-dot{width:8px;height:8px;border-radius:50%}
+        .legend-dot.booked{background:var(--navy-500)}.legend-dot.active-rental{background:var(--orange-500)}
+
+        /* NOTIFICATIONS */
+        #notifsCard{margin-top:18px}
+        .notif-list{display:flex;flex-direction:column}
+        .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--gray-100);position:relative}
+        .notif-item:last-child{border-bottom:none;padding-bottom:0}
+        .notif-item:first-child{padding-top:0}
+        .notif-dot{display:none;width:7px;height:7px;border-radius:50%;background:var(--orange-500);flex-shrink:0;margin-top:10px}
+        .notif-item.unread .notif-dot{display:block}
+        .notif-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .notif-icon svg{width:15px;height:15px}
+        .notif-icon.success{background:var(--green-100)}.notif-icon.success svg{stroke:var(--green-500)}
+        .notif-icon.warning{background:var(--amber-100)}.notif-icon.warning svg{stroke:var(--amber-500)}
+        .notif-icon.info{background:var(--blue-100)}.notif-icon.info svg{stroke:var(--blue-500)}
+        .notif-icon.promo{background:var(--orange-50)}.notif-icon.promo svg{stroke:var(--orange-500)}
+        .notif-body p{font-size:.78rem;color:var(--gray-600);line-height:1.5}
+        .notif-body p strong{color:var(--navy-900)}
+        .notif-time{font-size:.68rem;color:var(--gray-400);margin-top:3px;display:block}
+
+        /* ACTIVITY TIMELINE */
+        #activityCard{margin-top:18px}
+        .timeline{display:flex;flex-direction:column}
+        .timeline-item{display:flex;align-items:flex-start;gap:12px;padding-bottom:16px;position:relative}
+        .timeline-item:last-child{padding-bottom:0}
+        .timeline-item:last-child .timeline-line{display:none}
+        .timeline-line{position:absolute;left:9px;top:20px;width:2px;bottom:0;background:var(--gray-200)}
+        .timeline-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;border:3px solid;background:#fff;position:relative;z-index:1}
+        .timeline-dot.orange{border-color:var(--orange-500)}
+        .timeline-dot.green{border-color:var(--green-500)}
+        .timeline-dot.navy{border-color:var(--navy-500)}
+        .timeline-dot.purple{border-color:var(--purple-500)}
+        .timeline-body p{font-size:.8rem;color:var(--gray-700);line-height:1.4}
+        .timeline-body p strong{color:var(--navy-900)}
+        .timeline-body span{font-size:.68rem;color:var(--gray-400);margin-top:2px;display:block}
+
+        /* FOOTER */
+        .dash-footer{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-top:1px solid var(--gray-200);margin-top:auto;flex-wrap:wrap;gap:12px}
+        .dash-footer p{font-size:.76rem;color:var(--gray-400)}
+        .footer-links{display:flex;gap:18px}
+        .footer-links a{font-size:.76rem;color:var(--gray-500);transition:color .2s}.footer-links a:hover{color:var(--orange-500)}
+
+        /* ANIMATIONS */
+        @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+        /* RESPONSIVE TABLET */
+        @media(max-width:1024px){
+            .sidebar{transform:translateX(-100%)}
+            .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
+            .sidebar-close{display:block}
+            .main{margin-left:0}
+            .hamburger{display:flex}
+            .search-box{display:none}
+            .dash-grid{grid-template-columns:1fr}
+            .welcome-right{display:none}
+            .welcome-banner{padding:28px}
+        }
+
+        /* RESPONSIVE MOBILE — Enhanced for Vivo and all small phones */
+        @media(max-width:640px){
+            .dashboard-body{padding:10px}
+            .topbar{padding:0 8px;height:56px}
+            .greeting-title{font-size:.85rem}
+            .greeting-sub{display:none}
+            .topbar-profile{display:none}
+            .header-logout-btn{width:34px;height:34px;margin-left:2px;}
+            .header-logout-btn svg{width:16px;height:16px;}
+            .topbar-right{gap:6px;}
+            .topbar-icon-btn{width:36px;height:36px}
+            .topbar-icon-btn svg{width:17px;height:17px}
+            .notif-badge{width:16px;height:16px;font-size:.55rem;top:-2px;right:-2px}
+
+            /* Welcome Banner - Optimized for small screens */
+            .welcome-banner{
+                padding:16px;
+                border-radius:var(--r-md);
+                flex-direction: column;
+                align-items: stretch;
+                gap:16px;
+                margin-bottom:16px;
+            }
+            .welcome-tag{font-size:.68rem;padding:4px 10px;margin-bottom:10px}
+            .welcome-heading{font-size:1.05rem;line-height:1.3;margin-bottom:8px}
+            .welcome-sub{font-size:.78rem;margin-bottom:16px;line-height:1.5}
+            .welcome-actions{flex-direction:column;width:100%;gap:8px}
+            .welcome-actions .btn{width:100%;justify-content:center;font-size:.78rem;padding:8px 14px}
+            .welcome-actions .btn svg{width:15px;height:15px}
+
+            /* Stats Row - 2 columns with better spacing */
+            .stats-row{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+            .stat-card{padding:12px;gap:8px;border-radius:var(--r-md);min-height:80px}
+            .stat-num{font-size:1.3rem}
+            .stat-num-prefix{font-size:.85rem}
+            .stat-icon{width:36px;height:36px;border-radius:var(--r-sm)}
+            .stat-icon svg{width:15px;height:15px}
+            .stat-label{font-size:.65rem;margin-top:2px}
+            .stat-trend{font-size:.6rem;margin-top:4px;display:none} /* Hide trend on very small screens */
+
+            /* Cards - Optimized padding */
+            .card-head{
+                padding:14px 14px 0;
+                flex-direction:row;
+                gap:8px;
+                align-items:center;
+                justify-content:space-between;
+            }
+            .card-content{padding:10px 14px 14px}
+            .card-title{font-size:.88rem}
+            .card-subtitle{font-size:.68rem}
+            .see-all{font-size:.72rem}
+
+            /* Booking Items - Fully optimized for small phones */
+            .booking-item{
+                display:grid;
+                grid-template-columns:42px 1fr;
+                gap:8px;
+                padding:12px 0;
+                position:relative;
+                min-height:80px;
+            }
+            .booking-date-col{
+                width:42px;
+                height:42px;
+                grid-row:span 2;
+                border-radius:var(--r-sm);
+            }
+            .booking-day{font-size:.9rem}
+            .booking-month{font-size:.5rem;letter-spacing:.5px}
+
+            .booking-thumb{
+                width:60px;
+                height:42px;
+                grid-column:2;
+                grid-row:1;
+                border-radius:var(--r-sm);
+            }
+            .booking-thumb img{width:100%;height:100%;object-fit:cover}
+
+            .booking-info{
+                grid-column:2;
+                grid-row:1;
+                padding-left:68px;
+                padding-right:35px;
+                min-width:0;
+            }
+            .booking-name{font-size:.8rem;margin-bottom:2px;line-height:1.25}
+            .booking-meta{font-size:.65rem;gap:6px;margin-bottom:4px;flex-direction:column;gap:2px}
+            .booking-meta svg{width:11px;height:11px}
+            .booking-tags{flex-wrap:wrap;gap:3px}
+            .tag{font-size:.58rem;padding:1px 6px}
+
+            .booking-price{
+                grid-column:2;
+                grid-row:2;
+                text-align:left;
+                padding-right:35px;
+            }
+            .price-amount{font-size:.85rem}
+            .price-dur{font-size:.6rem}
+
+            .booking-actions{
+                position:absolute;
+                right:0;
+                top:50%;
+                transform:translateY(-50%);
+                flex-direction:column;
+                gap:3px;
+            }
+            .action-btn{width:28px;height:28px;border-radius:var(--r-sm)}
+            .action-btn svg{width:12px;height:12px}
+
+            /* Transactions Table - Card Style for mobile */
+            .txn-table{display:flex;flex-direction:column;gap:8px}
+            .txn-row{
+                display:grid;
+                grid-template-columns:1fr auto;
+                gap:4px 8px;
+                padding:10px;
+                border:1px solid var(--gray-100);
+                border-radius:var(--r-sm);
+                background:var(--gray-50);
+            }
+            .txn-header{display:none}
+            .txn-desc{font-size:.78rem;grid-column:1/-1}
+            .txn-date{font-size:.68rem;color:var(--gray-500)}
+            .txn-amount{font-weight:700;color:var(--navy-900);text-align:right}
+            .txn-status{font-size:.62rem;padding:2px 8px}
+
+            /* Calendar - Optimized for small screens */
+            .cal-grid{gap:1px}
+            .cal-hdr{font-size:.5rem;padding:4px 0;letter-spacing:.3px}
+            .cal-day{font-size:.65rem;padding:5px 1px;border-radius:4px}
+            .cal-day.booked::after{width:3px;height:3px;bottom:2px}
+            .cal-btn{width:24px;height:24px}
+            .cal-btn svg{width:11px;height:11px}
+            .cal-month-label{font-size:.7rem;min-width:85px}
+            .cal-legend{flex-wrap:wrap;gap:8px;margin-top:10px;padding-top:8px}
+            .legend-item{font-size:.62rem}
+            .legend-dot{width:6px;height:6px}
+
+            /* Notifications */
+            .notif-item{gap:6px;padding:10px 0}
+            .notif-icon{width:28px;height:28px;border-radius:var(--r-sm)}
+            .notif-icon svg{width:13px;height:13px}
+            .notif-dot{width:5px;height:5px;margin-top:8px}
+            .notif-body p{font-size:.72rem;line-height:1.4}
+            .notif-time{font-size:.62rem}
+
+            /* Timeline */
+            .timeline-item{gap:8px;padding-bottom:12px}
+            .timeline-line{left:7px;top:16px}
+            .timeline-dot{width:14px;height:14px;border-width:2px}
+            .timeline-body p{font-size:.72rem;line-height:1.4}
+            .timeline-body span{font-size:.62rem}
+
+            /* Footer */
+            .dash-footer{
+                flex-direction:column;
+                align-items:center;
+                text-align:center;
+                padding:12px;
+                gap:6px;
+            }
+            .dash-footer p{font-size:.68rem}
+            .footer-links{flex-wrap:wrap;justify-content:center;gap:10px}
+            .footer-links a{font-size:.68rem}
+
+            /* Page Titles */
+            .page-title{font-size:1.15rem;margin-bottom:4px}
+            .page-subtitle{font-size:.72rem;margin-bottom:16px}
+
+            /* Profile Page */
+            #page-profile .card-content > div{
+                flex-direction:column;
+                text-align:center;
+                gap:12px;
+                padding:12px 0;
+            }
+            #page-profile img{
+                width:70px;
+                height:70px;
+                margin:0 auto;
+                border-width:2px;
+            }
+            #page-profile h3{font-size:1rem}
+            #page-profile p{font-size:.78rem}
+            #page-profile .sidebar-badge{font-size:.6rem;padding:2px 8px}
+        }
+
+        /* VERY SMALL PHONES - Vivo Y11, Y12, etc. (320-360px) */
+        @media(max-width:380px){
+            .stats-row{grid-template-columns:1fr 1fr;gap:6px}
+            .stat-card{
+                flex-direction:column;
+                align-items:center;
+                text-align:center;
+                padding:10px;
+                gap:6px;
+                min-height:90px;
+            }
+            .stat-icon{width:32px;height:32px}
+            .stat-icon svg{width:14px;height:14px}
+            .stat-num{font-size:1.2rem}
+            .stat-label{font-size:.6rem}
+            .stat-data{display:flex;flex-direction:column;align-items:center}
+
+            .welcome-heading{font-size:1rem}
+            .welcome-actions .btn{font-size:.75rem;padding:7px 12px}
+
+            .booking-item{
+                grid-template-columns:38px 1fr;
+                gap:6px;
+            }
+            .booking-date-col{width:38px;height:38px}
+            .booking-day{font-size:.8rem}
+            .booking-month{font-size:.45rem}
+            .booking-thumb{width:55px;height:38px}
+            .booking-info{padding-left:62px;padding-right:30px}
+            .booking-name{font-size:.75rem}
+            .booking-meta{font-size:.6rem}
+            .booking-price{padding-right:30px}
+            .price-amount{font-size:.8rem}
+
+            .booking-actions{right:0;flex-direction:column;gap:2px}
+            .action-btn{width:26px;height:26px}
+            .action-btn svg{width:11px;height:11px}
+
+            .topbar-right{gap:4px}
+            .header-logout-btn{width:32px;height:32px}
+            .topbar-icon-btn{width:34px;height:34px}
+            .hamburger span{width:18px;height:2px}
+            .greeting-title{font-size:.78rem}
+
+            .card-title{font-size:.82rem}
+            .page-title{font-size:1.1rem}
+
+            .cal-day{font-size:.6rem;padding:4px 1px}
+            .cal-month-label{font-size:.65rem;min-width:80px}
+
+            .txn-desc{font-size:.72rem}
+            .txn-date{font-size:.62rem}
+            .txn-amount{font-size:.78rem}
+
+            .notif-body p{font-size:.68rem}
+            .timeline-body p{font-size:.68rem}
+        }
+
+        /* VERY VERY SMALL (320px and below) - Vivo Y91, etc. */
+        @media(max-width:340px){
+            .stats-row{grid-template-columns:1fr;gap:6px}
+            .stat-card{
+                flex-direction:row;
+                align-items:center;
+                text-align:left;
+                padding:8px 10px;
+                min-height:auto;
+                gap:8px;
+            }
+            .stat-data{flex-direction:column;align-items:flex-start}
+            .stat-icon{width:30px;height:30px}
+            .stat-num{font-size:1.1rem}
+
+            .welcome-banner{padding:12px}
+            .welcome-heading{font-size:.9rem}
+            .welcome-sub{font-size:.72rem}
+
+            .booking-item{
+                grid-template-columns:34px 1fr;
+                gap:4px;
+            }
+            .booking-date-col{width:34px;height:34px}
+            .booking-thumb{width:48px;height:34px}
+            .booking-info{padding-left:54px;padding-right:24px}
+            .booking-price{padding-right:24px}
+
+            .action-btn{width:24px;height:24px}
+            .action-btn svg{width:10px;height:10px}
+
+            .topbar{padding:0 4px}
+            .greeting-title{font-size:.7rem}
+            .topbar-icon-btn{width:30px;height:30px}
+            .header-logout-btn{width:30px;height:30px}
+
+            .cal-hdr{font-size:.45rem}
+            .cal-day{font-size:.55rem;padding:3px 0}
+        }
+
+        /* Edge specific scrollbar adjustment */
+        @supports (-ms-ime-align:auto) {
+            .sidebar, .sidebar-nav { scrollbar-width: thin; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR OVERLAY (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-logo" id="sidebarLogo" onclick="navigateTo('dashboard'); return false;">
+                <img src="./images/Stackly_logo.webp" alt="Stackly Adventure Tourism" class="logo-img">
+            </a>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="sidebar-profile">
+            <img src="" alt="Traveler" class="sidebar-avatar" width="48" height="48" id="sidebarAvatar">
+            <div class="sidebar-user">
+                <h3 class="sidebar-username" id="sidebarUsername">Traveler</h3>
+                <span class="sidebar-badge">Gold Explorer</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-group-label">Explore</span>
+            <ul class="nav-list">
+                <li class="nav-item active" data-page="dashboard"><a href="#" class="nav-link" onclick="navigateTo('dashboard'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Dashboard</span></a></li>
+                <li class="nav-item" data-page="my-adventures"><a href="#" class="nav-link" onclick="navigateTo('my-adventures'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20l6-11 4 6 3-4 5 9z"/><circle cx="17" cy="6" r="2.2"/></svg><span>My Adventures</span><span class="nav-count">2</span></a></li>
+                <li class="nav-item" data-page="bookings"><a href="#" class="nav-link" onclick="navigateTo('bookings'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Bookings</span><span class="nav-count">3</span></a></li>
+                <li class="nav-item" data-page="wishlist"><a href="#" class="nav-link" onclick="navigateTo('wishlist'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Wishlist</span><span class="nav-count">4</span></a></li>
+            </ul>
+            <span class="nav-group-label">Account</span>
+            <ul class="nav-list">
+                <li class="nav-item" data-page="transactions"><a href="#" class="nav-link" onclick="navigateTo('transactions'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Transactions</span></a></li>
+                <li class="nav-item" data-page="documents"><a href="#" class="nav-link" onclick="navigateTo('documents'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Documents</span></a></li>
+                <li class="nav-item" data-page="notifications"><a href="#" class="nav-link" onclick="navigateTo('notifications'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span>Notifications</span><span class="nav-count orange">4</span></a></li>
+            </ul>
+            <span class="nav-group-label">Settings</span>
+            <ul class="nav-list">
+                <li class="nav-item" data-page="profile"><a href="#" class="nav-link" onclick="navigateTo('profile'); return false;"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>My Profile</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main" id="mainContent">
+        <header class="topbar" id="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+                <div class="topbar-greeting">
+                    <h1 class="greeting-title" id="greetingTitle">Good Afternoon, <span class="text-accent" id="greetingName">Traveler</span></h1>
+                    <p class="greeting-sub" id="greetingSub">Tuesday, 2 September 2026</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box" id="searchBox">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="search-input" placeholder="Search treks, destinations..." id="searchInput">
+                </div>
+                <button class="topbar-icon-btn" id="topbarNotif" aria-label="Notifications" onclick="navigateTo('notifications')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notif-badge">4</span>
+                </button>
+                <div class="topbar-profile" id="topbarProfile" onclick="navigateTo('profile')">
+                    <img src="" alt="Traveler" width="36" height="36" id="topbarAvatar">
+                </div>
+                <!-- LOGOUT BUTTON IN HEADER (Visible all sizes) -->
+                <button class="header-logout-btn" id="headerLogoutBtn" title="Logout" aria-label="Logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+            <!-- DASHBOARD PAGE -->
+            <section class="page-section active" id="page-dashboard">
+                <section class="welcome-banner" id="welcomeBanner">
+                    <div class="welcome-left">
+                        <span class="welcome-tag">🏔️ Adventure In Progress</span>
+                        <h2 class="welcome-heading">Your <strong>Himalayan High Pass Trek</strong> is underway</h2>
+                        <p class="welcome-sub">Expedition ends on <strong>Sep 5, 2026</strong> — 3 days remaining. Current altitude <strong>3,400 m</strong>. Trek safe!</p>
+                        <div class="welcome-actions">
+                            <a href="404.html" class="btn btn-accent" id="btnExtend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Extend Adventure</a>
+                            <a href="#" class="btn btn-outline" id="btnViewTrip" onclick="navigateTo('my-adventures'); return false;">View Trip Details</a>
+                        </div>
+                    </div>
+                    <div class="welcome-right">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='390' viewBox='0 0 700 390'%3E%3Crect width='700' height='390' fill='%23111834'/%3E%3Ccircle cx='540' cy='85' r='46' fill='%23ffcba8' opacity='0.85'/%3E%3Cpath d='M0 390 L180 150 L300 260 L420 110 L600 320 L700 240 L700 390 Z' fill='%232a4480'/%3E%3Cpath d='M0 390 L140 220 L280 330 L400 200 L560 350 L700 300 L700 390 Z' fill='%23FF6B35' opacity='0.85'/%3E%3Cpath d='M180 150 L140 220 L215 205 Z' fill='%23dce5f2'/%3E%3Cpath d='M420 110 L400 200 L462 175 Z' fill='%23dce5f2'/%3E%3Ctext x='350' y='372' font-family='Arial' font-size='26' fill='white' text-anchor='middle' font-weight='bold' opacity='0.85'%3EEXPLORE%3C/text%3E%3C/svg%3E" alt="Active Adventure — Himalayan High Pass Trek" class="welcome-car" width="340" height="190">
+                        <div class="welcome-float fuel" id="floatFuel">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20l6-11 4 6 3-4 5 9z"/></svg>
+                            <div><span class="float-val">3,400 m</span><span class="float-lbl">Altitude</span></div>
+                        </div>
+                        <div class="welcome-float km" id="floatKm">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <div><span class="float-val">42 km</span><span class="float-lbl">Trekked</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="stats-row" id="statsRow">
+                    <div class="stat-card" id="statActive"><div class="stat-icon orange-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20l6-11 4 6 3-4 5 9z"/><circle cx="17" cy="6" r="2.2"/></svg></div><div class="stat-data"><span class="stat-num" data-target="2">0</span><span class="stat-label">Active Adventures</span></div><div class="stat-trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +1</div></div>
+                    <div class="stat-card" id="statTrips"><div class="stat-icon navy-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-data"><span class="stat-num" data-target="18">0</span><span class="stat-label">Adventures Done</span></div><div class="stat-trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +3</div></div>
+                    <div class="stat-card" id="statUpcoming"><div class="stat-icon green-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-data"><span class="stat-num" data-target="3">0</span><span class="stat-label">Upcoming Trips</span></div><div class="stat-trend neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg> Same</div></div>
+                    <div class="stat-card" id="statSaved"><div class="stat-icon purple-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="stat-data"><span class="stat-num" data-target="12450">0</span><span class="stat-label">Reward Points</span></div><div class="stat-trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +500</div></div>
+                </section>
+
+                <div class="dash-grid">
+                    <div class="dash-left">
+                        <section class="card" id="bookingsCard">
+                            <div class="card-head">
+                                <div><h2 class="card-title">Upcoming Adventures</h2><p class="card-subtitle">Your scheduled expeditions</p></div>
+                                <select class="card-filter" id="bookingFilter"><option value="all">All</option><option value="week">This Week</option><option value="month">This Month</option></select>
+                            </div>
+                            <div class="card-content">
+                                <div class="booking-item" id="booking1">
+                                    <div class="booking-date-col"><span class="booking-day">08</span><span class="booking-month">SEP</span></div>
+                                    <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23111d38'/%3E%3Cpath d='M0 60 L26 26 L46 60 Z' fill='%23FF6B35'/%3E%3Cpath d='M32 60 L56 16 L86 60 Z' fill='%234a6aa5'/%3E%3Ccircle cx='74' cy='14' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Himalayan High Pass Trek" width="90" height="67" loading="lazy"></div>
+                                    <div class="booking-info"><h3 class="booking-name">Himalayan High Pass Trek</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sep 8 – Sep 12</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Manali → Leh</span></div><div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag high-altitude">High Altitude</span></div></div>
+                                    <div class="booking-price"><span class="price-amount">₹13,996</span><span class="price-dur">4 days</span></div>
+                                    <div class="booking-actions"><button class="action-btn edit" title="Modify" onclick="showToast('Editing Himalayan High Pass Trek...', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn cancel" title="Cancel" onclick="showToast('Himalayan trek booking cancelled', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></button></div>
+                                </div>
+                                <div class="booking-item" id="booking2">
+                                    <div class="booking-date-col orange-date"><span class="booking-day">20</span><span class="booking-month">SEP</span></div>
+                                    <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23dbeafe'/%3E%3Cpath d='M0 40 Q22 30 45 40 T90 40 L90 67 L0 67 Z' fill='%233b82f6'/%3E%3Cpath d='M0 52 Q25 44 50 52 T90 52 L90 67 L0 67 Z' fill='%231e3260'/%3E%3Ccircle cx='22' cy='20' r='9' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Scuba Diving Escape" width="90" height="67" loading="lazy"></div>
+                                    <div class="booking-info"><h3 class="booking-name">Scuba Diving Escape</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sep 20 – Sep 22</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Andaman Islands</span></div><div class="booking-tags"><span class="tag pending">Pending</span><span class="tag guided">Guided</span></div></div>
+                                    <div class="booking-price"><span class="price-amount">₹15,998</span><span class="price-dur">2 days</span></div>
+                                    <div class="booking-actions"><button class="action-btn edit" title="Modify" onclick="showToast('Editing Scuba Diving Escape...', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn cancel" title="Cancel" onclick="showToast('Scuba Diving booking cancelled', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></button></div>
+                                </div>
+                                <div class="booking-item" id="booking3">
+                                    <div class="booking-date-col green-date"><span class="booking-day">05</span><span class="booking-month">OCT</span></div>
+                                    <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23fef3c7'/%3E%3Cpath d='M0 46 Q25 38 45 46 T90 42 L90 67 L0 67 Z' fill='%23f59e0b'/%3E%3Cpath d='M0 56 Q30 48 55 56 T90 54 L90 67 L0 67 Z' fill='%23c4461c'/%3E%3Ccircle cx='70' cy='16' r='8' fill='%23ff8a47'/%3E%3C/svg%3E" alt="Rajasthan Desert Safari" width="90" height="67" loading="lazy"></div>
+                                    <div class="booking-info"><h3 class="booking-name">Rajasthan Desert Safari</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Oct 5 – Oct 10</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Jaisalmer</span></div><div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag camping">Camping</span></div></div>
+                                    <div class="booking-price"><span class="price-amount">₹17,495</span><span class="price-dur">5 days</span></div>
+                                    <div class="booking-actions"><button class="action-btn edit" title="Modify" onclick="showToast('Editing Rajasthan Desert Safari...', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="action-btn cancel" title="Cancel" onclick="showToast('Desert Safari booking cancelled', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></button></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="card" id="transactionsCard">
+                            <div class="card-head"><div><h2 class="card-title">Recent Transactions</h2><p class="card-subtitle">Your payment history</p></div><a href="#" class="see-all" onclick="navigateTo('transactions'); return false;">View All →</a></div>
+                            <div class="card-content">
+                                <div class="txn-table">
+                                    <div class="txn-row txn-header"><span>Description</span><span>Date</span><span>Amount</span><span>Status</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Himalayan High Pass Trek</strong> — 5 day expedition</span><span class="txn-date">Aug 28, 2026</span><span class="txn-amount">₹9,995</span><span class="txn-status paid">Paid</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Travel Insurance</strong> — High altitude cover</span><span class="txn-date">Aug 28, 2026</span><span class="txn-amount">₹1,499</span><span class="txn-status paid">Paid</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Scuba Diving Escape</strong> — Advance booking</span><span class="txn-date">Aug 25, 2026</span><span class="txn-amount">₹3,499</span><span class="txn-status paid">Paid</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Desert Safari</strong> — Security deposit</span><span class="txn-date">Aug 22, 2026</span><span class="txn-amount">₹5,000</span><span class="txn-status pending-status">Pending</span></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="dash-right">
+                        <section class="card" id="calendarCard">
+                            <div class="card-head">
+                                <h2 class="card-title">Adventure Calendar</h2>
+                                <div class="cal-nav">
+                                    <button class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+                                    <span class="cal-month-label" id="calMonthLabel">September 2026</span>
+                                    <button class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="cal-grid" id="calGrid"></div>
+                                <div class="cal-legend"><span class="legend-item"><span class="legend-dot booked"></span> Booked</span><span class="legend-item"><span class="legend-dot active-rental"></span> Active</span></div>
+                            </div>
+                        </section>
+
+                        <section class="card" id="notifsCard">
+                            <div class="card-head"><h2 class="card-title">Notifications</h2><a href="#" class="see-all" onclick="navigateTo('notifications'); return false;">View All →</a></div>
+                            <div class="card-content">
+                                <div class="notif-list">
+                                    <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="notif-body"><p><strong>Trek Confirmed</strong> — Himalayan High Pass Trek for Sep 8-12 is confirmed.</p><span class="notif-time">1 hour ago</span></div></div>
+                                    <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="notif-body"><p><strong>Weather Alert:</strong> Light snowfall expected near the pass. Carry extra layers.</p><span class="notif-time">3 hours ago</span></div></div>
+                                    <div class="notif-item"><div class="notif-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="notif-body"><p><strong>Special Offer:</strong> Get 20% off on all monsoon trek packages this weekend!</p><span class="notif-time">1 day ago</span></div></div>
+                                    <div class="notif-item"><div class="notif-icon promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="notif-body"><p><strong>Reward Points:</strong> You earned 500 points from your last adventure!</p><span class="notif-time">2 days ago</span></div></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="card" id="activityCard">
+                            <div class="card-head"><h2 class="card-title">Recent Activity</h2></div>
+                            <div class="card-content">
+                                <div class="timeline">
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot orange"></div><div class="timeline-body"><p>Adventure started — <strong>Himalayan High Pass Trek</strong></p><span>Today, 9:00 AM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot green"></div><div class="timeline-body"><p>Payment received — <strong>₹9,995</strong></p><span>Aug 28, 11:30 AM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot navy"></div><div class="timeline-body"><p>Booked <strong>Himalayan High Pass Trek</strong> for Sep 8-12</p><span>Aug 25, 3:15 PM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot purple"></div><div class="timeline-body"><p>Completed — <strong>Valley of Flowers Trek</strong></p><span>Aug 20, 6:00 PM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot green"></div><div class="timeline-body"><p>Earned <strong>500 reward points</strong></p><span>Aug 20, 6:05 PM</span></div></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MY ADVENTURES PAGE -->
+            <section class="page-section" id="page-my-adventures">
+                <h2 class="page-title">My Adventures</h2>
+                <p class="page-subtitle">Manage your ongoing and completed expeditions</p>
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">Active Adventures</h2><p class="card-subtitle">Currently in progress</p></div></div>
+                    <div class="card-content">
+                        <div class="booking-item">
+                            <div class="booking-date-col"><span class="booking-day">02</span><span class="booking-month">SEP</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23111d38'/%3E%3Cpath d='M0 58 L24 26 L44 58 Z' fill='%23FF6B35'/%3E%3Cpath d='M34 58 L58 18 L88 58 Z' fill='%234a6aa5'/%3E%3Ccircle cx='74' cy='15' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Himalayan High Pass Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Himalayan High Pass Trek</h3><div class="booking-meta"><span>Sep 2 – Sep 5</span><span>3,400 m altitude</span></div><div class="booking-tags"><span class="tag confirmed">Active</span><span class="tag high-altitude">High Altitude</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹9,995</span><span class="price-dur">3 days left</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-head"><div><h2 class="card-title">Past Adventures</h2><p class="card-subtitle">Completed expeditions</p></div></div>
+                    <div class="card-content">
+                        <div class="booking-item">
+                            <div class="booking-date-col green-date"><span class="booking-day">20</span><span class="booking-month">AUG</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23d1fae5'/%3E%3Cpath d='M0 56 L26 28 L48 56 Z' fill='%2310b981'/%3E%3Cpath d='M36 56 L60 24 L90 56 Z' fill='%23059669'/%3E%3Ccircle cx='72' cy='16' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Valley of Flowers Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Valley of Flowers Trek</h3><div class="booking-meta"><span>Aug 18 – Aug 20</span><span>Uttarakhand</span></div><div class="booking-tags"><span class="tag confirmed">Completed</span><span class="tag trekking">Trekking</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹6,500</span><span class="price-dur">2 days</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOOKINGS PAGE -->
+            <section class="page-section" id="page-bookings">
+                <h2 class="page-title">Bookings</h2>
+                <p class="page-subtitle">View and manage all your adventure bookings</p>
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">All Bookings</h2><p class="card-subtitle">Upcoming and past reservations</p></div></div>
+                    <div class="card-content">
+                        <div class="booking-item">
+                            <div class="booking-date-col"><span class="booking-day">08</span><span class="booking-month">SEP</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23111d38'/%3E%3Cpath d='M0 60 L26 26 L46 60 Z' fill='%23FF6B35'/%3E%3Cpath d='M32 60 L56 16 L86 60 Z' fill='%234a6aa5'/%3E%3Ccircle cx='74' cy='14' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Himalayan High Pass Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Himalayan High Pass Trek</h3><div class="booking-meta"><span>Sep 8 – Sep 12</span><span>Manali → Leh</span></div><div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag high-altitude">High Altitude</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹13,996</span></div>
+                        </div>
+                        <div class="booking-item">
+                            <div class="booking-date-col orange-date"><span class="booking-day">20</span><span class="booking-month">SEP</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23dbeafe'/%3E%3Cpath d='M0 40 Q22 30 45 40 T90 40 L90 67 L0 67 Z' fill='%233b82f6'/%3E%3Cpath d='M0 52 Q25 44 50 52 T90 52 L90 67 L0 67 Z' fill='%231e3260'/%3E%3Ccircle cx='22' cy='20' r='9' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Scuba Diving Escape" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Scuba Diving Escape</h3><div class="booking-meta"><span>Sep 20 – Sep 22</span><span>Andaman Islands</span></div><div class="booking-tags"><span class="tag pending">Pending</span><span class="tag guided">Guided</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹15,998</span></div>
+                        </div>
+                        <div class="booking-item">
+                            <div class="booking-date-col green-date"><span class="booking-day">05</span><span class="booking-month">OCT</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23fef3c7'/%3E%3Cpath d='M0 46 Q25 38 45 46 T90 42 L90 67 L0 67 Z' fill='%23f59e0b'/%3E%3Cpath d='M0 56 Q30 48 55 56 T90 54 L90 67 L0 67 Z' fill='%23c4461c'/%3E%3Ccircle cx='70' cy='16' r='8' fill='%23ff8a47'/%3E%3C/svg%3E" alt="Rajasthan Desert Safari" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Rajasthan Desert Safari</h3><div class="booking-meta"><span>Oct 5 – Oct 10</span><span>Jaisalmer</span></div><div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag camping">Camping</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹17,495</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WISHLIST PAGE -->
+            <section class="page-section" id="page-wishlist">
+                <h2 class="page-title">Wishlist</h2>
+                <p class="page-subtitle">Adventures you have saved for later — tap the heart to remove</p>
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">Saved Adventures</h2><p class="card-subtitle">4 adventures on your list</p></div><a href="#" class="see-all" onclick="showToast('Share your wishlist coming soon!', 'info'); return false;">Share →</a></div>
+                    <div class="card-content">
+                        <!-- Wishlist Item 1 -->
+                        <div class="booking-item">
+                            <div class="booking-date-col heart-col">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23cffafe'/%3E%3Cpath d='M0 50 L25 18 L48 50 Z' fill='%23ffffff'/%3E%3Cpath d='M30 50 L58 8 L88 50 Z' fill='%23ffffff'/%3E%3Crect y='50' width='90' height='17' fill='%230891b2'/%3E%3C/svg%3E" alt="Everest Base Camp Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Everest Base Camp Trek</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Nepal Himalayas</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 12 days</span></div><div class="booking-tags"><span class="tag high-altitude">High Altitude</span><span class="tag trekking">Trekking</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹45,999</span><span class="price-dur">per person</span></div>
+                            <div class="booking-actions">
+                                <button class="action-btn heart" title="Remove from wishlist" onclick="showToast('Removed from wishlist', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+                                <button class="action-btn book" title="Book now" onclick="showToast('Booking Everest Base Camp Trek...', 'success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                            </div>
+                        </div>
+
+                        <!-- Wishlist Item 2 -->
+                        <div class="booking-item">
+                            <div class="booking-date-col heart-col">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23d1fae5'/%3E%3Cpath d='M0 50 L25 20 L48 50 Z' fill='%2310b981'/%3E%3Cpath d='M30 50 L58 12 L88 50 Z' fill='%23059669'/%3E%3Ccircle cx='74' cy='14' r='7' fill='%23ffcba8'/%3E%3Ccircle cx='18' cy='18' r='5' fill='%23f472b6'/%3E%3C/svg%3E" alt="Valley of Flowers Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Valley of Flowers Trek</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Uttarakhand</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 5 days</span></div><div class="booking-tags"><span class="tag trekking">Trekking</span><span class="tag confirmed">Monsoon Special</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹8,999</span><span class="price-dur">per person</span></div>
+                            <div class="booking-actions">
+                                <button class="action-btn heart" title="Remove from wishlist" onclick="showToast('Removed from wishlist', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+                                <button class="action-btn book" title="Book now" onclick="showToast('Booking Valley of Flowers Trek...', 'success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                            </div>
+                        </div>
+
+                        <!-- Wishlist Item 3 -->
+                        <div class="booking-item">
+                            <div class="booking-date-col heart-col">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23dbeafe'/%3E%3Cpath d='M0 40 Q22 30 45 40 T90 40 L90 67 L0 67 Z' fill='%233b82f6'/%3E%3Cpath d='M0 52 Q25 44 50 52 T90 52 L90 67 L0 67 Z' fill='%231e3260'/%3E%3Cpath d='M25 30 L32 12 L42 30 Z' fill='%23ff6b35'/%3E%3C/svg%3E" alt="Rishikesh River Rafting" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Rishikesh River Rafting</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Rishikesh, Uttarakhand</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 2 days</span></div><div class="booking-tags"><span class="tag water-sports">Water Sports</span><span class="tag guided">Guided</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹3,499</span><span class="price-dur">per person</span></div>
+                            <div class="booking-actions">
+                                <button class="action-btn heart" title="Remove from wishlist" onclick="showToast('Removed from wishlist', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+                                <button class="action-btn book" title="Book now" onclick="showToast('Booking Rishikesh River Rafting...', 'success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                            </div>
+                        </div>
+
+                        <!-- Wishlist Item 4 -->
+                        <div class="booking-item">
+                            <div class="booking-date-col heart-col">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23cffafe'/%3E%3Crect y='35' width='90' height='32' fill='%230891b2'/%3E%3Cpath d='M0 35 Q25 28 45 35 T90 35' fill='%230e7490'/%3E%3Cpath d='M22 35 L30 22 L40 35 Z' fill='%23f59e0b'/%3E%3Ccircle cx='70' cy='16' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Kerala Backwaters Kayaking" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info"><h3 class="booking-name">Kerala Backwaters Kayaking</h3><div class="booking-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Alleppey, Kerala</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 3 days</span></div><div class="booking-tags"><span class="tag coastal">Coastal</span><span class="tag water-sports">Water Sports</span></div></div>
+                            <div class="booking-price"><span class="price-amount">₹9,999</span><span class="price-dur">per person</span></div>
+                            <div class="booking-actions">
+                                <button class="action-btn heart" title="Remove from wishlist" onclick="showToast('Removed from wishlist', 'warning')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+                                <button class="action-btn book" title="Book now" onclick="showToast('Booking Kerala Backwaters Kayaking...', 'success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRANSACTIONS PAGE -->
+            <section class="page-section" id="page-transactions">
+                <h2 class="page-title">Transactions</h2>
+                <p class="page-subtitle">Complete payment history</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="txn-table">
+                            <div class="txn-row txn-header"><span>Description</span><span>Date</span><span>Amount</span><span>Status</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Himalayan High Pass Trek</strong> — 5 day expedition</span><span class="txn-date">Aug 28, 2026</span><span class="txn-amount">₹9,995</span><span class="txn-status paid">Paid</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Travel Insurance</strong> — High altitude cover</span><span class="txn-date">Aug 28, 2026</span><span class="txn-amount">₹1,499</span><span class="txn-status paid">Paid</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Scuba Diving Escape</strong> — Advance booking</span><span class="txn-date">Aug 25, 2026</span><span class="txn-amount">₹3,499</span><span class="txn-status paid">Paid</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Desert Safari</strong> — Security deposit</span><span class="txn-date">Aug 22, 2026</span><span class="txn-amount">₹5,000</span><span class="txn-status pending-status">Pending</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Valley of Flowers Trek</strong> — 2 day trek</span><span class="txn-date">Aug 18, 2026</span><span class="txn-amount">₹6,500</span><span class="txn-status paid">Paid</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DOCUMENTS PAGE -->
+            <section class="page-section" id="page-documents">
+                <h2 class="page-title">Documents</h2>
+                <p class="page-subtitle">Your permits, insurance and trip documents</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            <h3>No Documents</h3>
+                            <p>Trek permits, insurance and trip documents will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NOTIFICATIONS PAGE -->
+            <section class="page-section" id="page-notifications">
+                <h2 class="page-title">Notifications</h2>
+                <p class="page-subtitle">Stay updated with your adventures</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="notif-list">
+                            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="notif-body"><p><strong>Trek Confirmed</strong> — Himalayan High Pass Trek for Sep 8-12 is confirmed.</p><span class="notif-time">1 hour ago</span></div></div>
+                            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="notif-body"><p><strong>Weather Alert:</strong> Light snowfall expected near the pass. Carry extra layers.</p><span class="notif-time">3 hours ago</span></div></div>
+                            <div class="notif-item"><div class="notif-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="notif-body"><p><strong>Special Offer:</strong> Get 20% off on all monsoon trek packages this weekend!</p><span class="notif-time">1 day ago</span></div></div>
+                            <div class="notif-item"><div class="notif-icon promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="notif-body"><p><strong>Reward Points:</strong> You earned 500 points from your last adventure!</p><span class="notif-time">2 days ago</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROFILE PAGE -->
+            <section class="page-section" id="page-profile">
+                <h2 class="page-title">My Profile</h2>
+                <p class="page-subtitle">Manage your traveler information</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;padding:20px 0;">
+                            <img id="profileAvatar" src="" alt="Traveler" style="width:100px;height:100px;border-radius:50%;border:3px solid #FF6B35;object-fit:cover;">
+                            <div>
+                                <h3 style="font-size:1.3rem;font-weight:700;color:var(--navy-900);" id="profileName">Traveler</h3>
+                                <p style="color:var(--gray-500);margin-top:4px;" id="profileEmail">traveler@email.com</p>
+                                <p style="color:var(--gray-500);margin-top:4px;" id="profilePhone">+91 98765 43210</p>
+                                <span class="sidebar-badge" style="margin-top:8px;">Gold Explorer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="dash-footer" id="dashFooter">
+            <p>&copy; 2026 Stackly Adventure Tourism. All rights reserved.</p>
+            <div class="footer-links"><a href="404.html" id="footerHelp">Help Center</a><a href="404.html" id="footerPrivacy">Privacy</a><a href="404.html" id="footerTerms">Terms</a></div>
+        </footer>
+    </main>
+
+    <script>
+        // SIDEBAR TOGGLE
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const hamburger = document.getElementById('hamburgerBtn');
+        const closeBtn = document.getElementById('sidebarClose');
+
+        function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
+        function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow=''; }
+
+        hamburger.addEventListener('click', openSidebar);
+        closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+        document.addEventListener('keydown', e => { if(e.key==='Escape') closeSidebar(); });
+        window.addEventListener('resize', ()=>{ if(window.innerWidth>1024) closeSidebar(); });
+
+        // HEADER LOGOUT HANDLER
+        const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+        if (headerLogoutBtn) {
+            headerLogoutBtn.addEventListener('click', function() {
+                // Clear traveler data and redirect to login
+                localStorage.removeItem('stacklyUserName');
+                localStorage.removeItem('stacklyUserEmail');
+                localStorage.removeItem('stacklyUserPhone');
+                localStorage.removeItem('loggedInUserEmail');
+                localStorage.removeItem('loggedInUserName');
+                localStorage.removeItem('loggedInUserPhone');
+                localStorage.removeItem('vrUserEmail');
+                localStorage.removeItem('vrUserName');
+                window.location.href = 'login.html'; // Redirect to login page
+            });
+        }
+
+        // USER DATA FUNCTIONS
+        function getInitial() {
+            const userName = getUserName();
+            return userName.charAt(0).toUpperCase();
+        }
+
+        function getUserName() {
+            return localStorage.getItem('stacklyUserName')
+                || localStorage.getItem('loggedInUserName')
+                || localStorage.getItem('vrUserName')
+                || 'Traveler';
+        }
+
+        function getUserEmail() {
+            return localStorage.getItem('stacklyUserEmail')
+                || localStorage.getItem('loggedInUserEmail')
+                || localStorage.getItem('vrUserEmail')
+                || 'traveler@email.com';
+        }
+
+        function getUserPhone() {
+            return localStorage.getItem('stacklyUserPhone')
+                || localStorage.getItem('loggedInUserPhone')
+                || '+91 98765 43210';
+        }
+
+        // Update all user info on page load
+        function updateUserInfo() {
+            const userName = getUserName();
+            const userEmail = getUserEmail();
+            const userInitial = getInitial();
+            const userPhone = getUserPhone();
+
+            // Update sidebar
+            const sidebarUsername = document.getElementById('sidebarUsername');
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            if (sidebarUsername) sidebarUsername.textContent = userName;
+            if (sidebarAvatar) sidebarAvatar.alt = userName;
+
+            // Update greeting
+            const greetingName = document.getElementById('greetingName');
+            if (greetingName) greetingName.textContent = userName.split(' ')[0]; // First name only for greeting
+
+            // Update topbar avatar
+            const topbarAvatar = document.getElementById('topbarAvatar');
+            if (topbarAvatar) topbarAvatar.alt = userName;
+
+            // Update profile page
+            const profileName = document.getElementById('profileName');
+            const profileEmail = document.getElementById('profileEmail');
+            const profilePhone = document.getElementById('profilePhone');
+            const profileAvatar = document.getElementById('profileAvatar');
+            if (profileName) profileName.textContent = userName;
+            if (profileEmail) profileEmail.textContent = userEmail;
+            if (profilePhone) profilePhone.textContent = userPhone;
+            if (profileAvatar) profileAvatar.alt = userName;
+
+            // Update avatar images with user initial
+            const avatarSVG = (size, fontSize) => {
+                return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 ${size} ${size}'%3E%3Crect width='${size}' height='${size}' rx='${size/2}' fill='%23FF6B35'/%3E%3Ctext x='${size/2}' y='${size*0.65}' font-family='Outfit,Arial' font-size='${fontSize}' fill='white' text-anchor='middle' font-weight='bold'%3E${userInitial}%3C/text%3E%3C/svg%3E`;
+            };
+
+            if (sidebarAvatar) sidebarAvatar.src = avatarSVG(48, 22);
+            if (topbarAvatar) topbarAvatar.src = avatarSVG(36, 16);
+            if (profileAvatar) profileAvatar.src = avatarSVG(100, 40);
+        }
+
+        // PAGE NAVIGATION
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            const targetSection = document.getElementById('page-' + pageId);
+            if (targetSection) targetSection.classList.add('active');
+            document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === pageId) item.classList.add('active');
+            });
+            const greetingTitle = document.getElementById('greetingTitle');
+            const pageNames = {
+                'dashboard':'Dashboard',
+                'my-adventures':'My Adventures',
+                'bookings':'Bookings',
+                'wishlist':'Wishlist',
+                'transactions':'Transactions',
+                'documents':'Documents',
+                'notifications':'Notifications',
+                'profile':'My Profile'
+            };
+            const now = new Date();
+            const hour = now.getHours();
+            let g = 'Good Evening';
+            if(hour < 12) g = 'Good Morning';
+            else if(hour < 17) g = 'Good Afternoon';
+
+            if (pageId === 'dashboard') {
+                const userName = getUserName().split(' ')[0];
+                greetingTitle.innerHTML = `${g}, <span class="text-accent">${userName}</span>`;
+            } else {
+                greetingTitle.textContent = pageNames[pageId] || 'Dashboard';
+            }
+            if (window.innerWidth <= 1024) closeSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // DYNAMIC GREETING
+        const greetingTitle = document.getElementById('greetingTitle');
+        const greetingSub = document.getElementById('greetingSub');
+        const now = new Date();
+        const hour = now.getHours();
+        let g = 'Good Evening';
+        if(hour < 12) g = 'Good Morning';
+        else if(hour < 17) g = 'Good Afternoon';
+
+        const userName = getUserName().split(' ')[0];
+        greetingTitle.innerHTML = `${g}, <span class="text-accent">${userName}</span>`;
+        greetingSub.textContent = now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+        // STAT COUNTER ANIMATION
+        const statNums = document.querySelectorAll('.stat-num');
+        function animateNum(el, target){
+            const duration = target > 1000 ? 2200 : 1400;
+            const start = performance.now();
+            function step(ts){
+                const progress = Math.min((ts-start)/duration, 1);
+                const eased = 1 - Math.pow(1-progress, 3);
+                const val = Math.round(eased * target);
+                el.textContent = target > 1000 ? val.toLocaleString('en-IN') : val;
+                if(progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-target'), 10);
+                    animateNum(el, target);
+                    observer.unobserve(el);
+                }
+            });
+        }, {threshold:0.5});
+        statNums.forEach(n => observer.observe(n));
+
+        // MINI CALENDAR
+        let currentMonth = 8;
+        let currentYear = 2026;
+        const calGrid = document.getElementById('calGrid');
+        const calMonthLabel = document.getElementById('calMonthLabel');
+        const bookings = { '2026-9':[8,9,10,11,12], '2026-10':[5,6,7,8,9,10] };
+        const activeRental = { '2026-9':[1,2,3,4,5] };
+        const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+        function renderCalendar(m,y){
+            calGrid.innerHTML = '';
+            calMonthLabel.textContent = `${monthNames[m]} ${y}`;
+            ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+                const h = document.createElement('div');
+                h.className = 'cal-hdr'; h.textContent = d;
+                calGrid.appendChild(h);
+            });
+            const firstDay = new Date(y,m,1).getDay();
+            const daysInMonth = new Date(y,m+1,0).getDate();
+            const prevDays = new Date(y,m,0).getDate();
+            const today = new Date();
+            const bKey = `${y}-${m+1}`;
+            const bDays = bookings[bKey] || [];
+            const aDays = activeRental[bKey] || [];
+            for(let i=firstDay-1; i>=0; i--){
+                const d = document.createElement('div');
+                d.className = 'cal-day other'; d.textContent = prevDays-i;
+                calGrid.appendChild(d);
+            }
+            for(let d=1; d<=daysInMonth; d++){
+                const el = document.createElement('div');
+                el.className = 'cal-day';
+                if(d === today.getDate() && m === today.getMonth() && y === today.getFullYear()) el.classList.add('today');
+                if(bDays.includes(d)) el.classList.add('booked');
+                if(aDays.includes(d)) el.classList.add('active-day');
+                el.textContent = d;
+                calGrid.appendChild(el);
+            }
+            const totalCells = calGrid.children.length;
+            const rem = 42 - totalCells;
+            for(let i=1; i<=rem; i++){
+                const d = document.createElement('div');
+                d.className = 'cal-day other'; d.textContent = i;
+                calGrid.appendChild(d);
+            }
+        }
+
+        document.getElementById('calPrev').addEventListener('click', ()=>{
+            currentMonth--;
+            if(currentMonth<0){currentMonth=11; currentYear--;}
+            renderCalendar(currentMonth,currentYear);
+        });
+        document.getElementById('calNext').addEventListener('click', ()=>{
+            currentMonth++;
+            if(currentMonth>11){currentMonth=0; currentYear++;}
+            renderCalendar(currentMonth,currentYear);
+        });
+        renderCalendar(currentMonth,currentYear);
+
+        // TOAST FUNCTION
+        function showToast(message, type='info'){
+            const existing = document.querySelector('.toast-msg');
+            if(existing) existing.remove();
+            const colors = { success:'#10b981', warning:'#f59e0b', error:'#ef4444', info:'#FF6B35' };
+            const icons = { success:'✓', warning:'⚠', error:'✕', info:'ℹ' };
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg';
+            Object.assign(toast.style, {
+                position:'fixed', bottom:'24px', right:'24px',
+                background:colors[type]||colors.info, color:'#fff', padding:'14px 22px', borderRadius:'12px',
+                boxShadow:'0 8px 24px rgba(0,0,0,.2)', zIndex:'10000',
+                display:'flex', alignItems:'center', gap:'10px', fontSize:'.85rem', fontWeight:'500',
+                fontFamily:'Outfit, sans-serif', transform:'translateY(80px)', opacity:'0',
+                transition:'all .4s cubic-bezier(.4,0,.2,1)', maxWidth:'calc(100vw - 48px)'
+            });
+            toast.innerHTML = `<span style="font-weight:700">${icons[type]}</span> ${message}`;
+            document.body.appendChild(toast);
+            requestAnimationFrame(()=>{ toast.style.transform='translateY(0)'; toast.style.opacity='1'; });
+            setTimeout(()=>{ toast.style.transform='translateY(80px)'; toast.style.opacity='0'; setTimeout(()=>toast.remove(),400); },3500);
+        }
+
+        // Initialize user info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInfo();
+        });
+
+        // Check if traveler is logged in
+        if (!localStorage.getItem('stacklyUserEmail')
+            && !localStorage.getItem('loggedInUserEmail')
+            && !localStorage.getItem('vrUserEmail')) {
+            // If no user data found, redirect to login
+            window.location.href = 'login.html';
+        }
+
+        // Update user info immediately
+        updateUserInfo();
+    </script>
+</body>
+</html>

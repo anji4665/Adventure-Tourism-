@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0B1426">
+    <meta name="description" content="Stackly Adventure Tourism — Guide Dashboard. Manage your assignments, trekkers, schedule and earnings.">
+    <title>Guide Dashboard | Stackly Adventure Tourism</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           STACKLY ADVENTURE TOURISM — GUIDE DASHBOARD STYLES
+           Palette: Deep Navy (#0B1426) + Orange (#FF6B35) + White
+           Font: Outfit
+           ============================================================ */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --navy-950:#050a14;--navy-900:#0B1426;--navy-800:#111d38;--navy-700:#17274a;
+            --navy-600:#1e3260;--navy-500:#2a4480;--navy-400:#4a6aa5;--navy-300:#7a96c5;
+            --navy-200:#b0c2df;--navy-100:#dce5f2;--navy-50:#f0f4fa;
+            --orange-50:#fff5ef;--orange-100:#ffe5d4;--orange-200:#ffcba8;--orange-300:#ffaa72;
+            --orange-400:#ff8a47;--orange-500:#FF6B35;--orange-600:#e55a28;--orange-700:#c4461c;
+            --white:#ffffff;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+            --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;
+            --gray-700:#374151;--gray-800:#1f2937;
+            --green-500:#10b981;--green-100:#d1fae5;
+            --amber-500:#f59e0b;--amber-100:#fef3c7;
+            --red-500:#ef4444;--red-100:#fee2e2;
+            --blue-500:#3b82f6;--blue-100:#dbeafe;
+            --purple-500:#8b5cf6;--purple-100:#ede9fe;
+            --bg:#f4f6fa;--card:#ffffff;
+            --shadow-sm:0 1px 3px rgba(11,20,38,.06);
+            --shadow-md:0 4px 16px rgba(11,20,38,.08);
+            --shadow-lg:0 12px 40px rgba(11,20,38,.12);
+            --shadow-glow:0 0 30px rgba(255,107,53,.2);
+            --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;--r-full:9999px;
+            --sidebar-w:264px;--topbar-h:70px;
+            --ease:cubic-bezier(.4,0,.2,1);
+        }
+        html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+        body{
+            font-family:'Outfit',sans-serif;background:var(--bg);color:var(--gray-800);
+            display:flex;min-height:100vh;overflow-x:hidden;
+            -webkit-tap-highlight-color:transparent;
+            touch-action:manipulation;
+        }
+        img{max-width:100%;height:auto;display:block}
+        a{text-decoration:none;color:inherit}
+        button{border:none;background:none;cursor:pointer;font-family:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+        ul{list-style:none}
+        .text-accent{color:var(--orange-500)}
+        ::-webkit-scrollbar{width:6px;height:6px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+
+        /* SIDEBAR */
+        .sidebar{
+            width:var(--sidebar-w);min-height:100vh;position:fixed;left:0;top:0;z-index:100;
+            background:linear-gradient(185deg,var(--navy-800) 0%,var(--navy-950) 100%);
+            display:flex;flex-direction:column;transition:transform .35s var(--ease);
+            overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+            padding-bottom:env(safe-area-inset-bottom);
+        }
+        .sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:22px 20px 12px}
+        .sidebar-logo{display:flex;align-items:center;gap:10px}
+        .logo-img{height:38px;width:auto;object-fit:contain}
+        .sidebar-close{display:none;color:rgba(255,255,255,.5);padding:6px;transition:color .2s}
+        .sidebar-close:hover{color:#fff}
+        .sidebar-profile{display:flex;align-items:center;gap:12px;padding:14px 20px;margin:4px 12px 16px;background:rgba(255,255,255,.06);border-radius:var(--r-md);border:1px solid rgba(255,255,255,.05)}
+        .sidebar-avatar{width:48px;height:48px;border-radius:var(--r-full);object-fit:cover;border:2px solid rgba(255,107,53,.45);flex-shrink:0}
+        .sidebar-user{min-width:0}
+        .sidebar-username{font-size:.88rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .sidebar-badge{font-size:.65rem;font-weight:700;color:var(--orange-400);background:rgba(255,107,53,.12);padding:2px 10px;border-radius:var(--r-full);margin-top:4px;display:inline-block;letter-spacing:.4px;text-transform:uppercase}
+        .sidebar-nav{flex:1;padding:0 12px 20px}
+        .nav-group-label{display:block;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1.5px;padding:16px 16px 8px;margin-top:4px}
+        .nav-item{margin-bottom:1px}
+        .nav-link{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:var(--r-sm);color:rgba(255,255,255,.55);font-size:.86rem;font-weight:500;transition:all .2s var(--ease);position:relative;cursor:pointer}
+        .nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+        .nav-item.active .nav-link{background:rgba(255,107,53,.12);color:var(--orange-400);font-weight:600}
+        .nav-item.active .nav-link::before{content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:3px;height:22px;background:var(--orange-500);border-radius:0 4px 4px 0}
+        .nav-icon{width:19px;height:19px;flex-shrink:0}
+        .nav-count{margin-left:auto;background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:var(--r-full);min-width:20px;text-align:center}
+        .nav-count.orange{background:var(--orange-500);color:#fff}
+        .nav-logout{color:rgba(255,100,100,.6)}
+        .nav-logout:hover{color:#ff7878;background:rgba(255,100,100,.1)}
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99;opacity:0;transition:opacity .35s var(--ease)}
+        .sidebar-overlay.active{display:block;opacity:1}
+
+        /* MAIN CONTENT */
+        .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left .35s var(--ease);min-width:0}
+
+        /* TOP BAR */
+        .topbar{
+            height:var(--topbar-h);background:var(--card);border-bottom:1px solid var(--gray-200);
+            display:flex;align-items:center;justify-content:space-between;gap:10px;
+            padding:0 28px;padding-left:calc(28px + env(safe-area-inset-left));
+            padding-right:calc(28px + env(safe-area-inset-right));
+            position:sticky;top:0;z-index:50;box-shadow:var(--shadow-sm);
+        }
+        .topbar-left{display:flex;align-items:center;gap:16px;min-width:0}
+        .topbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+        .hamburger{display:none;flex-direction:column;gap:5px;padding:9px;border-radius:var(--r-sm);flex-shrink:0}
+        .hamburger:hover{background:var(--gray-100)}
+        .hamburger span{display:block;width:22px;height:2.5px;background:var(--gray-700);border-radius:2px;transition:all .3s var(--ease)}
+        .topbar-greeting{min-width:0}
+        .greeting-title{font-size:1.1rem;font-weight:700;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .greeting-sub{font-size:.78rem;color:var(--gray-500);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .search-box{position:relative;display:flex;align-items:center}
+        .search-icon{width:17px;height:17px;position:absolute;left:13px;color:var(--gray-400);pointer-events:none}
+        .search-input{width:240px;padding:9px 14px 9px 38px;border:1.5px solid var(--gray-200);border-radius:var(--r-full);font-size:.82rem;font-family:inherit;color:var(--gray-800);background:var(--gray-50);outline:none;transition:all .2s var(--ease)}
+        .search-input::placeholder{color:var(--gray-400)}
+        .search-input:focus{border-color:var(--orange-400);box-shadow:0 0 0 3px rgba(255,107,53,.1);background:#fff}
+        .topbar-icon-btn{width:40px;height:40px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;background:var(--gray-50);border:1.5px solid var(--gray-200);transition:all .2s;position:relative;flex-shrink:0}
+        .topbar-icon-btn svg{width:19px;height:19px;color:var(--gray-600)}
+        .topbar-icon-btn:hover{background:var(--orange-50);border-color:var(--orange-200)}
+        .topbar-icon-btn:hover svg{color:var(--orange-600)}
+        .notif-badge{position:absolute;top:-3px;right:-3px;width:18px;height:18px;background:var(--orange-500);color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;animation:pulseBadge 2s infinite}
+        @keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.35)}50%{box-shadow:0 0 0 6px rgba(255,107,53,0)}}
+        .topbar-profile{width:36px;height:36px;border-radius:var(--r-full);overflow:hidden;border:2px solid var(--orange-200);cursor:pointer;transition:border-color .2s;flex-shrink:0}
+        .topbar-profile:hover{border-color:var(--orange-500)}
+        .topbar-profile img{width:100%;height:100%;object-fit:cover}
+
+        /* LOGOUT BUTTON HEADER */
+        .header-logout-btn{
+            display:flex;align-items:center;justify-content:center;
+            width:40px;height:40px;border-radius:50%;
+            background:var(--gray-50);border:1.5px solid var(--gray-200);
+            transition:all .2s;flex-shrink:0;
+        }
+        .header-logout-btn svg{width:19px;height:19px;color:var(--gray-600);transition:color .2s}
+        .header-logout-btn:hover{background:var(--red-100);border-color:#fecaca}
+        .header-logout-btn:hover svg{color:var(--red-500)}
+
+        /* DASHBOARD BODY */
+        .dashboard-body{
+            flex:1;padding:28px;
+            padding-left:calc(28px + env(safe-area-inset-left));
+            padding-right:calc(28px + env(safe-area-inset-right));
+            padding-bottom:calc(28px + env(safe-area-inset-bottom));
+        }
+
+        /* PAGE SECTIONS */
+        .page-section{display:none;animation:fadeUp .5s var(--ease)}
+        .page-section.active{display:block}
+        .page-title{font-size:1.5rem;font-weight:700;color:var(--navy-900);margin-bottom:6px}
+        .page-subtitle{font-size:.85rem;color:var(--gray-500);margin-bottom:24px}
+        .empty-state{text-align:center;padding:40px 20px;color:var(--gray-400)}
+        .empty-state svg{width:60px;height:60px;margin-bottom:16px;opacity:.5}
+        .empty-state h3{font-size:1.1rem;color:var(--gray-600);margin-bottom:8px}
+        .empty-state p{font-size:.85rem;color:var(--gray-400)}
+
+        /* WELCOME BANNER */
+        .welcome-banner{background:linear-gradient(135deg,var(--navy-900) 0%,var(--navy-700) 50%,var(--navy-600) 100%);border-radius:var(--r-xl);padding:36px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);animation:fadeUp .6s var(--ease)}
+        .welcome-banner::before{content:'';position:absolute;top:-60%;right:-15%;width:450px;height:450px;background:radial-gradient(circle,rgba(255,107,53,.1) 0%,transparent 70%);border-radius:50%}
+        .welcome-banner::after{content:'';position:absolute;bottom:-40%;left:5%;width:300px;height:300px;background:radial-gradient(circle,rgba(42,68,128,.2) 0%,transparent 70%);border-radius:50%}
+        .welcome-left{position:relative;z-index:1;flex:1;min-width:0}
+        .welcome-tag{display:inline-block;background:rgba(255,107,53,.15);color:var(--orange-400);font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:var(--r-full);margin-bottom:16px;letter-spacing:.5px}
+        .welcome-heading{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.35}
+        .welcome-heading strong{color:var(--orange-400)}
+        .welcome-sub{font-size:.88rem;color:rgba(255,255,255,.55);margin-bottom:24px;line-height:1.6}
+        .welcome-sub strong{color:rgba(255,255,255,.85)}
+        .welcome-actions{display:flex;gap:12px;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 22px;border-radius:var(--r-full);font-size:.85rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all .3s var(--ease);border:2px solid transparent;white-space:nowrap;min-height:42px}
+        .btn svg{width:17px;height:17px;flex-shrink:0}
+        .btn-accent{background:var(--orange-500);color:#fff;border-color:var(--orange-500)}
+        .btn-accent:hover{background:var(--orange-600);border-color:var(--orange-600);transform:translateY(-2px);box-shadow:var(--shadow-glow)}
+        .btn-outline{border-color:rgba(255,255,255,.3);color:#fff}
+        .btn-outline:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+        .welcome-right{position:relative;z-index:1;flex-shrink:0}
+        .welcome-img{width:340px;border-radius:var(--r-lg);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:transform .4s var(--ease)}
+        .welcome-banner:hover .welcome-img{transform:scale(1.03) translateY(-4px)}
+        .welcome-float{position:absolute;background:rgba(255,255,255,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:10px 16px;color:#fff;display:flex;align-items:center;gap:10px;z-index:2;animation:floatCard 4s ease-in-out infinite}
+        .welcome-float svg{width:18px;height:18px;color:var(--orange-400);flex-shrink:0}
+        .welcome-float.alt{bottom:20px;left:-20px}
+        .welcome-float.grp{top:20px;right:-10px;animation-delay:2s}
+        .float-val{font-size:1.05rem;font-weight:800;display:block;color:var(--orange-300)}
+        .float-lbl{font-size:.65rem;color:rgba(255,255,255,.45);display:block}
+        @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+        /* STATS ROW */
+        .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
+        .stat-card{background:var(--card);border-radius:var(--r-lg);padding:22px;display:flex;align-items:flex-start;gap:16px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-100);transition:all .3s var(--ease);animation:fadeUp .6s var(--ease) both;min-width:0}
+        .stat-card:nth-child(1){animation-delay:.1s}.stat-card:nth-child(2){animation-delay:.2s}.stat-card:nth-child(3){animation-delay:.3s}.stat-card:nth-child(4){animation-delay:.4s}
+        .stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+        .stat-icon{width:48px;height:48px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .stat-icon svg{width:22px;height:22px}
+        .stat-icon.orange-bg{background:var(--orange-50)}.stat-icon.orange-bg svg{stroke:var(--orange-600)}
+        .stat-icon.navy-bg{background:var(--navy-50)}.stat-icon.navy-bg svg{stroke:var(--navy-600)}
+        .stat-icon.green-bg{background:var(--green-100)}.stat-icon.green-bg svg{stroke:var(--green-500)}
+        .stat-icon.purple-bg{background:var(--purple-100)}.stat-icon.purple-bg svg{stroke:var(--purple-500)}
+        .stat-data{flex:1;min-width:0}
+        .stat-num{font-size:1.8rem;font-weight:800;color:var(--navy-900);line-height:1;display:block}
+        .stat-label{font-size:.76rem;color:var(--gray-500);font-weight:500;display:block;margin-top:4px}
+        .stat-trend{display:flex;align-items:center;gap:4px;font-size:.7rem;font-weight:700;margin-top:8px;align-self:flex-end;white-space:nowrap}
+        .stat-trend svg{width:14px;height:14px;flex-shrink:0}
+        .stat-trend.up{color:var(--green-500)}.stat-trend.neutral{color:var(--gray-400)}.stat-trend.down{color:var(--red-500)}
+
+        /* PAYOUT SUMMARY */
+        .payout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+        .payout-card{background:var(--card);border:1px solid var(--gray-100);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow-sm);animation:fadeUp .6s var(--ease) both}
+        .payout-label{font-size:.7rem;color:var(--gray-500);font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+        .payout-value{font-size:1.5rem;font-weight:800;color:var(--navy-900);margin-top:8px;line-height:1}
+        .payout-value.accent{color:var(--orange-600)}
+        .payout-note{font-size:.72rem;color:var(--gray-400);margin-top:6px}
+
+        /* DASHBOARD GRID */
+        .dash-grid{display:grid;grid-template-columns:1fr 370px;gap:24px;align-items:start}
+
+        /* CARDS */
+        .card{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);border:1px solid var(--gray-100);overflow:hidden;animation:fadeUp .6s var(--ease) .3s both}
+        .card-head{display:flex;align-items:flex-start;justify-content:space-between;padding:20px 24px 0;gap:12px}
+        .card-title{font-size:1rem;font-weight:700;color:var(--navy-900)}
+        .card-subtitle{font-size:.75rem;color:var(--gray-500);margin-top:2px}
+        .card-content{padding:16px 24px 24px}
+        .card-filter{padding:7px 12px;border:1.5px solid var(--gray-200);border-radius:var(--r-sm);font-size:.78rem;font-family:inherit;color:var(--gray-600);background:var(--gray-50);cursor:pointer;outline:none;transition:border-color .2s}
+        .card-filter:focus{border-color:var(--orange-400)}
+        .see-all{font-size:.8rem;font-weight:600;color:var(--orange-500);white-space:nowrap;transition:color .2s;padding-top:2px}
+        .see-all:hover{color:var(--orange-700)}
+
+        /* ASSIGNMENT / BOOKING ITEMS */
+        .booking-item{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--gray-100);transition:all .2s var(--ease);position:relative}
+        .booking-item:last-child{border-bottom:none;padding-bottom:0}
+        .booking-item:first-child{padding-top:0}
+        .booking-date-col{width:54px;height:58px;background:linear-gradient(135deg,var(--navy-700),var(--navy-900));border-radius:var(--r-md);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;color:#fff;box-shadow:0 3px 8px rgba(11,20,38,.2)}
+        .booking-date-col.orange-date{background:linear-gradient(135deg,var(--orange-500),var(--orange-700))}
+        .booking-date-col.green-date{background:linear-gradient(135deg,var(--green-500),#059669)}
+        .booking-date-col.purple-date{background:linear-gradient(135deg,var(--purple-500),#6d28d9)}
+        .booking-day{font-size:1.2rem;font-weight:800;line-height:1}
+        .booking-month{font-size:.6rem;font-weight:700;letter-spacing:1px;opacity:.8;margin-top:2px}
+        .booking-thumb{width:90px;height:62px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;background:var(--gray-100)}
+        .booking-thumb img{width:100%;height:100%;object-fit:cover}
+        .booking-info{flex:1;min-width:0}
+        .booking-name{font-size:.92rem;font-weight:700;color:var(--navy-900);margin-bottom:4px}
+        .booking-meta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+        .booking-meta span{display:flex;align-items:center;gap:4px;font-size:.74rem;color:var(--gray-500)}
+        .booking-meta svg{width:13px;height:13px;flex-shrink:0}
+        .booking-tags{display:flex;gap:5px;flex-wrap:wrap}
+        .tag{font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:var(--r-full);letter-spacing:.3px;white-space:nowrap}
+        .tag.confirmed{background:var(--green-100);color:var(--green-500)}
+        .tag.pending{background:var(--amber-100);color:var(--amber-500)}
+        .tag.guided{background:var(--navy-50);color:var(--navy-500)}
+        .tag.camping{background:var(--purple-100);color:var(--purple-500)}
+        .tag.trekking{background:var(--green-100);color:#059669}
+        .tag.high-altitude{background:var(--orange-100);color:var(--orange-700)}
+        .tag.water-sports{background:var(--blue-100);color:var(--blue-500)}
+        .tag.coastal{background:#cffafe;color:#0891b2}
+        .tag.certified{background:var(--navy-100);color:var(--navy-600)}
+        .booking-price{text-align:right;flex-shrink:0}
+        .price-amount{font-size:1rem;font-weight:800;color:var(--navy-900);display:block}
+        .price-dur{font-size:.68rem;color:var(--gray-400);display:block;margin-top:2px}
+        .booking-actions{display:flex;gap:5px;flex-shrink:0}
+        .action-btn{width:34px;height:34px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;border:1.5px solid var(--gray-200);background:var(--gray-50);transition:all .2s;flex-shrink:0}
+        .action-btn svg{width:14px;height:14px;color:var(--gray-500)}
+        .action-btn.edit:hover{border-color:var(--orange-300);background:var(--orange-50)}.action-btn.edit:hover svg{color:var(--orange-600)}
+        .action-btn.cancel:hover{border-color:var(--red-500);background:var(--red-100)}.action-btn.cancel:hover svg{color:var(--red-500)}
+        .action-btn.view:hover{border-color:var(--navy-400);background:var(--navy-50)}.action-btn.view:hover svg{color:var(--navy-600)}
+        .action-btn.ok:hover{border-color:var(--green-500);background:var(--green-100)}.action-btn.ok:hover svg{color:var(--green-500)}
+
+        /* TREKKER ITEMS */
+        .trekker-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
+        .trekker-item:last-child{border-bottom:none;padding-bottom:0}
+        .trekker-item:first-child{padding-top:0}
+        .trekker-avatar{width:46px;height:46px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1rem;background:linear-gradient(135deg,var(--navy-500),var(--navy-800));border:2px solid var(--gray-100)}
+        .trekker-avatar.accent{background:linear-gradient(135deg,var(--orange-500),var(--orange-700))}
+        .trekker-avatar.green{background:linear-gradient(135deg,var(--green-500),#047857)}
+        .trekker-avatar.purple{background:linear-gradient(135deg,var(--purple-500),#6d28d9)}
+        .trekker-info{flex:1;min-width:0}
+        .trekker-name{font-size:.9rem;font-weight:700;color:var(--navy-900);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .trekker-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:.72rem;color:var(--gray-500)}
+        .trekker-meta span{display:flex;align-items:center;gap:4px}
+        .trekker-meta svg{width:12px;height:12px}
+        .trekker-tags{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
+        .trekker-actions{display:flex;gap:6px;flex-shrink:0}
+
+        /* TRANSACTIONS */
+        .txn-table{display:flex;flex-direction:column}
+        .txn-row{display:grid;grid-template-columns:2fr 1fr 1fr .8fr;gap:12px;padding:12px 0;align-items:center;border-bottom:1px solid var(--gray-100);font-size:.82rem}
+        .txn-row:last-child{border-bottom:none}
+        .txn-header{font-weight:700;color:var(--gray-500);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;padding-bottom:10px}
+        .txn-desc{color:var(--gray-700)}.txn-desc strong{color:var(--navy-900)}
+        .txn-date{color:var(--gray-500);font-size:.78rem}
+        .txn-amount{font-weight:700;color:var(--navy-900)}
+        .txn-status{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:var(--r-full);text-align:center;display:inline-block}
+        .txn-status.paid{background:var(--green-100);color:var(--green-500)}
+        .txn-status.pending-status{background:var(--amber-100);color:var(--amber-500)}
+
+        /* CALENDAR */
+        .cal-nav{display:flex;align-items:center;gap:6px}
+        .cal-btn{width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;border:1px solid var(--gray-200);transition:all .2s}
+        .cal-btn svg{width:13px;height:13px;color:var(--gray-500)}
+        .cal-btn:hover{background:var(--orange-50);border-color:var(--orange-200)}
+        .cal-month-label{font-size:.8rem;font-weight:600;color:var(--gray-700);min-width:110px;text-align:center}
+        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+        .cal-hdr{text-align:center;font-size:.65rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;padding:8px 0}
+        .cal-day{text-align:center;padding:7px 4px;font-size:.76rem;font-weight:500;color:var(--gray-700);border-radius:var(--r-sm);cursor:pointer;transition:all .2s;position:relative}
+        .cal-day:hover{background:var(--orange-50);color:var(--orange-600)}
+        .cal-day.today{background:var(--orange-500);color:#fff;font-weight:700}
+        .cal-day.booked::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:5px;height:5px;background:var(--navy-500);border-radius:50%}
+        .cal-day.today.booked::after{background:#fff}
+        .cal-day.active-day{background:var(--orange-100);color:var(--orange-700);font-weight:600}
+        .cal-day.other{color:var(--gray-300)}
+        .cal-legend{display:flex;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--gray-100)}
+        .legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--gray-500);font-weight:500}
+        .legend-dot{width:8px;height:8px;border-radius:50%}
+        .legend-dot.booked{background:var(--navy-500)}.legend-dot.active-rental{background:var(--orange-500)}
+
+        /* NOTIFICATIONS */
+        .notif-list{display:flex;flex-direction:column}
+        .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--gray-100)}
+        .notif-item:last-child{border-bottom:none;padding-bottom:0}
+        .notif-item:first-child{padding-top:0}
+        .notif-dot{display:none;width:7px;height:7px;border-radius:50%;background:var(--orange-500);flex-shrink:0;margin-top:10px}
+        .notif-item.unread .notif-dot{display:block}
+        .notif-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .notif-icon svg{width:15px;height:15px}
+        .notif-icon.success{background:var(--green-100)}.notif-icon.success svg{stroke:var(--green-500)}
+        .notif-icon.warning{background:var(--amber-100)}.notif-icon.warning svg{stroke:var(--amber-500)}
+        .notif-icon.info{background:var(--blue-100)}.notif-icon.info svg{stroke:var(--blue-500)}
+        .notif-icon.promo{background:var(--orange-50)}.notif-icon.promo svg{stroke:var(--orange-500)}
+        .notif-body{min-width:0}
+        .notif-body p{font-size:.78rem;color:var(--gray-600);line-height:1.5}
+        .notif-body p strong{color:var(--navy-900)}
+        .notif-time{font-size:.68rem;color:var(--gray-400);margin-top:3px;display:block}
+
+        /* ACTIVITY TIMELINE */
+        .timeline{display:flex;flex-direction:column}
+        .timeline-item{display:flex;align-items:flex-start;gap:12px;padding-bottom:16px;position:relative}
+        .timeline-item:last-child{padding-bottom:0}
+        .timeline-item:last-child .timeline-line{display:none}
+        .timeline-line{position:absolute;left:9px;top:20px;width:2px;bottom:0;background:var(--gray-200)}
+        .timeline-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;border:3px solid;background:#fff;position:relative;z-index:1}
+        .timeline-dot.orange{border-color:var(--orange-500)}
+        .timeline-dot.green{border-color:var(--green-500)}
+        .timeline-dot.navy{border-color:var(--navy-500)}
+        .timeline-dot.purple{border-color:var(--purple-500)}
+        .timeline-body{min-width:0}
+        .timeline-body p{font-size:.8rem;color:var(--gray-700);line-height:1.4}
+        .timeline-body p strong{color:var(--navy-900)}
+        .timeline-body span{font-size:.68rem;color:var(--gray-400);margin-top:2px;display:block}
+
+        /* REVIEWS */
+        .review-item{padding:16px 0;border-bottom:1px solid var(--gray-100)}
+        .review-item:last-child{border-bottom:none;padding-bottom:0}
+        .review-item:first-child{padding-top:0}
+        .review-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+        .review-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.85rem;background:linear-gradient(135deg,var(--navy-500),var(--navy-800))}
+        .review-name{font-size:.85rem;font-weight:700;color:var(--navy-900)}
+        .review-trek{font-size:.7rem;color:var(--gray-400);display:block}
+        .stars{margin-left:auto;display:flex;gap:2px;color:var(--amber-500);flex-shrink:0}
+        .stars svg{width:14px;height:14px;fill:currentColor;stroke:none}
+        .stars svg.off{color:var(--gray-300)}
+        .review-text{font-size:.8rem;color:var(--gray-600);line-height:1.55}
+
+        /* PROGRESS */
+        .progress-track{height:8px;background:var(--gray-100);border-radius:99px;overflow:hidden;margin-top:10px}
+        .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange-500),var(--orange-400));border-radius:99px;transition:width 1s var(--ease)}
+
+        /* FOOTER */
+        .dash-footer{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-top:1px solid var(--gray-200);margin-top:auto;flex-wrap:wrap;gap:12px;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+        .dash-footer p{font-size:.76rem;color:var(--gray-400)}
+        .footer-links{display:flex;gap:18px;flex-wrap:wrap}
+        .footer-links a{font-size:.76rem;color:var(--gray-500);transition:color .2s}
+        .footer-links a:hover{color:var(--orange-500)}
+
+        /* ANIMATIONS */
+        @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ============================================================
+           RESPONSIVE — TABLET
+           ============================================================ */
+        @media(max-width:1024px){
+            .sidebar{transform:translateX(-100%)}
+            .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
+            .sidebar-close{display:block}
+            .main{margin-left:0}
+            .hamburger{display:flex}
+            .search-box{display:none}
+            .dash-grid{grid-template-columns:1fr}
+            .welcome-right{display:none}
+            .welcome-banner{padding:28px}
+        }
+
+        /* ============================================================
+           RESPONSIVE — MOBILE (phones incl. Vivo Y11/Y12/Y91)
+           ============================================================ */
+        @media(max-width:640px){
+            .dashboard-body{padding:12px;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+            .topbar{
+                height:58px;padding:0 10px;
+                padding-left:calc(10px + env(safe-area-inset-left));
+                padding-right:calc(10px + env(safe-area-inset-right));
+                gap:6px;
+            }
+            .topbar-left{gap:8px;flex:1}
+            .topbar-right{gap:6px}
+            .hamburger{padding:8px}
+            .hamburger span{width:20px;height:2.5px}
+            .greeting-title{font-size:.88rem}
+            .greeting-sub{display:none}
+            .topbar-profile{display:none}
+            .header-logout-btn{width:36px;height:36px}
+            .header-logout-btn svg{width:16px;height:16px}
+            .topbar-icon-btn{width:36px;height:36px}
+            .topbar-icon-btn svg{width:17px;height:17px}
+            .notif-badge{width:16px;height:16px;font-size:.55rem;top:-2px;right:-2px;border-width:1.5px}
+
+            /* Welcome Banner */
+            .welcome-banner{
+                padding:18px;border-radius:var(--r-lg);
+                flex-direction:column;align-items:stretch;
+                gap:16px;margin-bottom:16px;
+            }
+            .welcome-tag{font-size:.68rem;padding:4px 10px;margin-bottom:10px}
+            .welcome-heading{font-size:1.05rem;line-height:1.3;margin-bottom:8px}
+            .welcome-sub{font-size:.78rem;margin-bottom:16px;line-height:1.5}
+            .welcome-actions{flex-direction:column;width:100%;gap:8px}
+            .welcome-actions .btn{width:100%;font-size:.78rem;padding:9px 14px;min-height:40px}
+            .welcome-actions .btn svg{width:15px;height:15px}
+
+            /* Stats */
+            .stats-row{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+            .stat-card{padding:12px;gap:10px;border-radius:var(--r-md);min-height:78px;flex-direction:row;align-items:center}
+            .stat-card:hover{transform:none}
+            .stat-num{font-size:1.25rem}
+            .stat-icon{width:36px;height:36px;border-radius:var(--r-sm)}
+            .stat-icon svg{width:16px;height:16px}
+            .stat-label{font-size:.65rem;margin-top:2px;line-height:1.2}
+            .stat-trend{display:none}
+
+            /* Payout summary */
+            .payout-grid{grid-template-columns:1fr;gap:10px;margin-bottom:16px}
+            .payout-card{padding:14px;border-radius:var(--r-md)}
+            .payout-value{font-size:1.25rem}
+
+            /* Cards */
+            .card-head{padding:14px 14px 0;flex-direction:row;gap:8px;align-items:center;justify-content:space-between}
+            .card-content{padding:12px 14px 16px}
+            .card-title{font-size:.88rem}
+            .card-subtitle{font-size:.68rem}
+            .see-all{font-size:.72rem}
+
+            /* Assignment items — clean 2-col mobile grid */
+            .booking-item{
+                display:grid;
+                grid-template-columns:46px minmax(0,1fr) auto;
+                grid-template-areas:
+                    "date info actions"
+                    "date price actions";
+                gap:4px 10px;
+                padding:14px 0;
+                align-items:start;
+            }
+            .booking-date-col{
+                grid-area:date;width:46px;height:46px;
+                border-radius:var(--r-sm);align-self:start;
+            }
+            .booking-day{font-size:.95rem}
+            .booking-month{font-size:.5rem;letter-spacing:.5px}
+            .booking-thumb{display:none}
+
+            .booking-info{grid-area:info;min-width:0}
+            .booking-name{font-size:.82rem;margin-bottom:3px;line-height:1.25}
+            .booking-meta{flex-direction:column;gap:2px;margin-bottom:6px}
+            .booking-meta span{font-size:.68rem}
+            .booking-meta svg{width:11px;height:11px}
+            .booking-tags{gap:3px}
+            .tag{font-size:.58rem;padding:2px 7px}
+
+            .booking-price{grid-area:price;text-align:left}
+            .price-amount{font-size:.85rem}
+            .price-dur{font-size:.6rem}
+
+            .booking-actions{grid-area:actions;flex-direction:column;gap:4px;align-self:center}
+            .action-btn{width:30px;height:30px}
+            .action-btn svg{width:13px;height:13px}
+
+            /* Trekkers */
+            .trekker-item{gap:10px;padding:12px 0}
+            .trekker-avatar{width:40px;height:40px;font-size:.85rem}
+            .trekker-name{font-size:.82rem}
+            .trekker-meta{gap:8px;font-size:.68rem}
+            .trekker-actions{flex-direction:column;gap:4px}
+
+            /* Transactions — card style */
+            .txn-table{display:flex;flex-direction:column;gap:8px}
+            .txn-row{
+                display:grid;grid-template-columns:1fr auto;
+                gap:4px 10px;padding:12px;
+                border:1px solid var(--gray-100);border-radius:var(--r-sm);
+                background:var(--gray-50);
+            }
+            .txn-header{display:none}
+            .txn-desc{font-size:.78rem;grid-column:1/-1}
+            .txn-date{font-size:.68rem}
+            .txn-amount{text-align:right;font-size:.85rem}
+            .txn-status{font-size:.62rem;padding:2px 8px;justify-self:end}
+
+            /* Calendar */
+            .cal-grid{gap:1px}
+            .cal-hdr{font-size:.52rem;padding:5px 0;letter-spacing:.3px}
+            .cal-day{font-size:.68rem;padding:7px 1px;border-radius:5px;min-height:30px;display:flex;align-items:center;justify-content:center}
+            .cal-day.booked::after{width:3px;height:3px;bottom:2px}
+            .cal-btn{width:28px;height:28px}
+            .cal-btn svg{width:12px;height:12px}
+            .cal-month-label{font-size:.72rem;min-width:92px}
+            .cal-legend{flex-wrap:wrap;gap:10px;margin-top:10px;padding-top:10px}
+            .legend-item{font-size:.65rem}
+            .legend-dot{width:6px;height:6px}
+
+            /* Notifications */
+            .notif-item{gap:8px;padding:11px 0}
+            .notif-icon{width:28px;height:28px}
+            .notif-icon svg{width:13px;height:13px}
+            .notif-body p{font-size:.74rem;line-height:1.45}
+            .notif-time{font-size:.62rem}
+
+            /* Timeline */
+            .timeline-item{gap:10px;padding-bottom:14px}
+            .timeline-line{left:8px;top:18px}
+            .timeline-dot{width:16px;height:16px;border-width:3px}
+            .timeline-body p{font-size:.74rem;line-height:1.4}
+            .timeline-body span{font-size:.62rem}
+
+            /* Reviews */
+            .review-head{gap:8px}
+            .review-avatar{width:34px;height:34px;font-size:.78rem}
+            .review-name{font-size:.8rem}
+            .stars svg{width:12px;height:12px}
+            .review-text{font-size:.75rem}
+
+            /* Footer */
+            .dash-footer{flex-direction:column;align-items:center;text-align:center;padding:14px 12px;gap:8px}
+            .dash-footer p{font-size:.68rem}
+            .footer-links{justify-content:center;gap:12px}
+            .footer-links a{font-size:.68rem}
+
+            /* Page titles */
+            .page-title{font-size:1.15rem;margin-bottom:4px}
+            .page-subtitle{font-size:.74rem;margin-bottom:16px}
+
+            /* Profile */
+            #page-profile .profile-row{flex-direction:column;text-align:center;gap:14px;padding:8px 0}
+            #page-profile .profile-avatar{width:84px;height:84px;margin:0 auto;border-width:3px}
+        }
+
+        /* ============================================================
+           VERY SMALL PHONES — 360px & below (Vivo Y11 / Y91)
+           ============================================================ */
+        @media(max-width:380px){
+            .dashboard-body{padding:10px;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+            .topbar{padding:0 8px;height:54px}
+            .hamburger{padding:7px}
+            .hamburger span{width:18px;height:2px}
+            .greeting-title{font-size:.8rem}
+            .topbar-icon-btn{width:34px;height:34px}
+            .topbar-icon-btn svg{width:16px;height:16px}
+            .header-logout-btn{width:34px;height:34px}
+            .header-logout-btn svg{width:15px;height:15px}
+            .notif-badge{width:15px;height:15px;font-size:.52rem}
+
+            .stats-row{gap:6px}
+            .stat-card{padding:10px;gap:8px;min-height:70px}
+            .stat-icon{width:32px;height:32px}
+            .stat-icon svg{width:14px;height:14px}
+            .stat-num{font-size:1.1rem}
+            .stat-label{font-size:.6rem}
+
+            .welcome-banner{padding:14px}
+            .welcome-heading{font-size:.95rem}
+            .welcome-sub{font-size:.72rem}
+            .welcome-actions .btn{font-size:.74rem;padding:8px 12px;min-height:38px}
+
+            .booking-item{grid-template-columns:40px minmax(0,1fr) auto;gap:4px 8px}
+            .booking-date-col{width:40px;height:40px}
+            .booking-day{font-size:.82rem}
+            .booking-month{font-size:.45rem}
+            .booking-name{font-size:.78rem}
+            .booking-meta span{font-size:.64rem}
+            .price-amount{font-size:.8rem}
+            .action-btn{width:28px;height:28px}
+            .action-btn svg{width:12px;height:12px}
+
+            .payout-value{font-size:1.15rem}
+
+            .cal-day{font-size:.62rem;padding:6px 0;min-height:27px}
+            .cal-month-label{font-size:.68rem;min-width:84px}
+            .cal-btn{width:26px;height:26px}
+
+            .card-title{font-size:.84rem}
+            .page-title{font-size:1.05rem}
+            .txn-desc{font-size:.72rem}
+            .notif-body p{font-size:.7rem}
+            .timeline-body p{font-size:.7rem}
+            .review-text{font-size:.72rem}
+        }
+
+        /* EXTRA SMALL — 330px & below */
+        @media(max-width:340px){
+            .stats-row{grid-template-columns:1fr;gap:6px}
+            .stat-card{min-height:auto;padding:10px 12px}
+            .stat-num{font-size:1.1rem}
+
+            .welcome-heading{font-size:.88rem}
+            .welcome-sub{font-size:.7rem}
+
+            .booking-item{grid-template-columns:36px minmax(0,1fr) auto;gap:3px 7px}
+            .booking-date-col{width:36px;height:36px}
+            .booking-day{font-size:.78rem}
+            .action-btn{width:26px;height:26px}
+            .action-btn svg{width:11px;height:11px}
+
+            .greeting-title{font-size:.74rem}
+            .topbar-icon-btn{width:32px;height:32px}
+            .header-logout-btn{width:32px;height:32px}
+
+            .cal-hdr{font-size:.46rem}
+            .cal-day{font-size:.58rem;min-height:24px;padding:5px 0}
+        }
+
+        /* Touch devices: no sticky hover transforms */
+        @media(hover:none){
+            .stat-card:hover{transform:none;box-shadow:var(--shadow-sm)}
+            .btn-accent:hover{transform:none}
+            .welcome-banner:hover .welcome-img{transform:none}
+        }
+
+        /* Edge specific scrollbar adjustment */
+        @supports (-ms-ime-align:auto){
+            .sidebar,.sidebar-nav{scrollbar-width:thin}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR OVERLAY (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-logo" id="sidebarLogo" onclick="navigateTo('dashboard'); return false;">
+                <img src="./images/Stackly_logo.webp" alt="Stackly Adventure Tourism" class="logo-img">
+            </a>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <div class="sidebar-profile">
+            <img src="" alt="Guide" class="sidebar-avatar" width="48" height="48" id="sidebarAvatar">
+            <div class="sidebar-user">
+                <h3 class="sidebar-username" id="sidebarUsername">Guide</h3>
+                <span class="sidebar-badge">Certified Guide</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-group-label">Guide Hub</span>
+            <ul class="nav-list">
+                <li class="nav-item active" data-page="dashboard">
+                    <a href="#" class="nav-link" onclick="navigateTo('dashboard'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="assignments">
+                    <a href="#" class="nav-link" onclick="navigateTo('assignments'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20l6-11 4 6 3-4 5 9z"/><circle cx="17" cy="6" r="2.2"/></svg>
+                        <span>My Assignments</span><span class="nav-count">3</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="trekkers">
+                    <a href="#" class="nav-link" onclick="navigateTo('trekkers'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <span>Trekkers</span><span class="nav-count">24</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="schedule">
+                    <a href="#" class="nav-link" onclick="navigateTo('schedule'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span>Duty Schedule</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="earnings">
+                    <a href="#" class="nav-link" onclick="navigateTo('earnings'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        <span>Earnings</span>
+                    </a>
+                </li>
+            </ul>
+
+            <span class="nav-group-label">Account</span>
+            <ul class="nav-list">
+                <li class="nav-item" data-page="reviews">
+                    <a href="#" class="nav-link" onclick="navigateTo('reviews'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        <span>Reviews</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="documents">
+                    <a href="#" class="nav-link" onclick="navigateTo('documents'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="notifications">
+                    <a href="#" class="nav-link" onclick="navigateTo('notifications'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span>Notifications</span><span class="nav-count orange">4</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="profile">
+                    <a href="#" class="nav-link" onclick="navigateTo('profile'); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-logout" onclick="logoutGuide(); return false;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main" id="mainContent">
+        <header class="topbar" id="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+                <div class="topbar-greeting">
+                    <h1 class="greeting-title" id="greetingTitle">Good Afternoon, <span class="text-accent" id="greetingName">Guide</span></h1>
+                    <p class="greeting-sub" id="greetingSub">Tuesday, 2 September 2026</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box" id="searchBox">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="search-input" placeholder="Search treks, trekkers..." id="searchInput">
+                </div>
+                <button class="topbar-icon-btn" id="topbarNotif" aria-label="Notifications" onclick="navigateTo('notifications')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notif-badge">4</span>
+                </button>
+                <div class="topbar-profile" id="topbarProfile" onclick="navigateTo('profile')">
+                    <img src="" alt="Guide" width="36" height="36" id="topbarAvatar">
+                </div>
+                <!-- LOGOUT BUTTON IN HEADER -->
+                <button class="header-logout-btn" id="headerLogoutBtn" title="Logout" aria-label="Logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-body">
+
+            <!-- ================= DASHBOARD ================= -->
+            <section class="page-section active" id="page-dashboard">
+
+                <section class="welcome-banner" id="welcomeBanner">
+                    <div class="welcome-left">
+                        <span class="welcome-tag">🧭 Next Assignment in 6 Days</span>
+                        <h2 class="welcome-heading">You are leading the <strong>Himalayan High Pass Trek</strong></h2>
+                        <p class="welcome-sub">Departs <strong>Sep 8, 2026</strong> from Manali · <strong>12 trekkers</strong> registered · Roster &amp; permits ready for review.</p>
+                        <div class="welcome-actions">
+                            <a href="#" class="btn btn-accent" id="btnRoster" onclick="navigateTo('trekkers'); return false;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                View Trekker Roster
+                            </a>
+                            <a href="#" class="btn btn-outline" id="btnBriefing" onclick="showToast('Briefing checklist opened', 'info'); return false;">Start Briefing</a>
+                        </div>
+                    </div>
+                    <div class="welcome-right">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='390' viewBox='0 0 700 390'%3E%3Crect width='700' height='390' fill='%23111834'/%3E%3Ccircle cx='540' cy='85' r='46' fill='%23ffcba8' opacity='0.85'/%3E%3Cpath d='M0 390 L180 150 L300 260 L420 110 L600 320 L700 240 L700 390 Z' fill='%232a4480'/%3E%3Cpath d='M0 390 L140 220 L280 330 L400 200 L560 350 L700 300 L700 390 Z' fill='%23FF6B35' opacity='0.85'/%3E%3Cpath d='M180 150 L140 220 L215 205 Z' fill='%23dce5f2'/%3E%3Cpath d='M420 110 L400 200 L462 175 Z' fill='%23dce5f2'/%3E%3Ctext x='350' y='372' font-family='Arial' font-size='26' fill='white' text-anchor='middle' font-weight='bold' opacity='0.85'%3EGUIDE%3C/text%3E%3C/svg%3E" alt="Upcoming assignment — Himalayan High Pass Trek" class="welcome-img" width="340" height="190">
+                        <div class="welcome-float alt" id="floatAlt">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20l6-11 4 6 3-4 5 9z"/></svg>
+                            <div><span class="float-val">4,900 m</span><span class="float-lbl">Max Altitude</span></div>
+                        </div>
+                        <div class="welcome-float grp" id="floatGrp">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                            <div><span class="float-val">12</span><span class="float-lbl">Trekkers</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="stats-row" id="statsRow">
+                    <div class="stat-card" id="statAssignments">
+                        <div class="stat-icon orange-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20l6-11 4 6 3-4 5 9z"/><circle cx="17" cy="6" r="2.2"/></svg></div>
+                        <div class="stat-data"><span class="stat-num" data-target="3">0</span><span class="stat-label">Active Assignments</span></div>
+                        <div class="stat-trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +1</div>
+                    </div>
+                    <div class="stat-card" id="statTrekkers">
+                        <div class="stat-icon navy-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                        <div class="stat-data"><span class="stat-num" data-target="24">0</span><span class="stat-label">Trekkers This Month</span></div>
+                        <div class="stat-trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +6</div>
+                    </div>
+                    <div class="stat-card" id="statEarnings">
+                        <div class="stat-icon green-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                        <div class="stat-data"><span class="stat-num" data-target="124500" data-prefix="₹">0</span><span class="stat-label">Earnings (Sep)</span></div>
+                        <div class="stat-trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +18%</div>
+                    </div>
+                    <div class="stat-card" id="statRating">
+                        <div class="stat-icon purple-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                        <div class="stat-data"><span class="stat-num" data-target="4.9" data-decimal="1">0</span><span class="stat-label">Guide Rating</span></div>
+                        <div class="stat-trend neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg> 128 reviews</div>
+                    </div>
+                </section>
+
+                <div class="dash-grid">
+                    <div class="dash-left">
+
+                        <!-- UPCOMING ASSIGNMENTS -->
+                        <section class="card" id="assignmentsCard">
+                            <div class="card-head">
+                                <div><h2 class="card-title">Upcoming Assignments</h2><p class="card-subtitle">Treks assigned to you</p></div>
+                                <select class="card-filter" id="assignmentFilter" aria-label="Filter assignments">
+                                    <option value="all">All</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                            </div>
+                            <div class="card-content">
+
+                                <div class="booking-item" id="assignment1">
+                                    <div class="booking-date-col"><span class="booking-day">08</span><span class="booking-month">SEP</span></div>
+                                    <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23111d38'/%3E%3Cpath d='M0 60 L26 26 L46 60 Z' fill='%23FF6B35'/%3E%3Cpath d='M32 60 L56 16 L86 60 Z' fill='%234a6aa5'/%3E%3Ccircle cx='74' cy='14' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Himalayan High Pass Trek" width="90" height="67" loading="lazy"></div>
+                                    <div class="booking-info">
+                                        <h3 class="booking-name">Himalayan High Pass Trek</h3>
+                                        <div class="booking-meta">
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sep 8 – Sep 12</span>
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Manali → Leh</span>
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 12 trekkers</span>
+                                        </div>
+                                        <div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag high-altitude">High Altitude</span><span class="tag certified">Lead Guide</span></div>
+                                    </div>
+                                    <div class="booking-price"><span class="price-amount">₹18,500</span><span class="price-dur">guide payout</span></div>
+                                    <div class="booking-actions">
+                                        <button class="action-btn view" title="View details" onclick="showToast('Opening Himalayan High Pass Trek details…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                        <button class="action-btn edit" title="Update" onclick="showToast('Editing assignment…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                    </div>
+                                </div>
+
+                                <div class="booking-item" id="assignment2">
+                                    <div class="booking-date-col orange-date"><span class="booking-day">20</span><span class="booking-month">SEP</span></div>
+                                    <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23dbeafe'/%3E%3Cpath d='M0 40 Q22 30 45 40 T90 40 L90 67 L0 67 Z' fill='%233b82f6'/%3E%3Cpath d='M0 52 Q25 44 50 52 T90 52 L90 67 L0 67 Z' fill='%231e3260'/%3E%3Ccircle cx='22' cy='20' r='9' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Scuba Diving Escape" width="90" height="67" loading="lazy"></div>
+                                    <div class="booking-info">
+                                        <h3 class="booking-name">Scuba Diving Escape</h3>
+                                        <div class="booking-meta">
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sep 20 – Sep 22</span>
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Andaman Islands</span>
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 8 trekkers</span>
+                                        </div>
+                                        <div class="booking-tags"><span class="tag pending">Awaiting Confirm</span><span class="tag water-sports">Water Sports</span></div>
+                                    </div>
+                                    <div class="booking-price"><span class="price-amount">₹11,200</span><span class="price-dur">guide payout</span></div>
+                                    <div class="booking-actions">
+                                        <button class="action-btn view" title="View details" onclick="showToast('Opening Scuba Diving Escape details…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                        <button class="action-btn ok" title="Accept" onclick="showToast('Assignment accepted ✓', 'success')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></button>
+                                    </div>
+                                </div>
+
+                                <div class="booking-item" id="assignment3">
+                                    <div class="booking-date-col green-date"><span class="booking-day">05</span><span class="booking-month">OCT</span></div>
+                                    <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23fef3c7'/%3E%3Cpath d='M0 46 Q25 38 45 46 T90 42 L90 67 L0 67 Z' fill='%23f59e0b'/%3E%3Cpath d='M0 56 Q30 48 55 56 T90 54 L90 67 L0 67 Z' fill='%23c4461c'/%3E%3Ccircle cx='70' cy='16' r='8' fill='%23ff8a47'/%3E%3C/svg%3E" alt="Rajasthan Desert Safari" width="90" height="67" loading="lazy"></div>
+                                    <div class="booking-info">
+                                        <h3 class="booking-name">Rajasthan Desert Safari</h3>
+                                        <div class="booking-meta">
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Oct 5 – Oct 10</span>
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Jaisalmer</span>
+                                            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> 16 trekkers</span>
+                                        </div>
+                                        <div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag camping">Camping</span></div>
+                                    </div>
+                                    <div class="booking-price"><span class="price-amount">₹21,000</span><span class="price-dur">guide payout</span></div>
+                                    <div class="booking-actions">
+                                        <button class="action-btn view" title="View details" onclick="showToast('Opening Rajasthan Desert Safari details…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                        <button class="action-btn edit" title="Update" onclick="showToast('Editing assignment…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <!-- PAYOUTS -->
+                        <section class="card" id="payoutCard" style="margin-top:20px;">
+                            <div class="card-head">
+                                <div><h2 class="card-title">Recent Payouts</h2><p class="card-subtitle">Your guide earnings history</p></div>
+                                <a href="#" class="see-all" onclick="navigateTo('earnings'); return false;">View All →</a>
+                            </div>
+                            <div class="card-content">
+                                <div class="txn-table">
+                                    <div class="txn-row txn-header"><span>Description</span><span>Date</span><span>Amount</span><span>Status</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Valley of Flowers Trek</strong> — guide fee</span><span class="txn-date">Aug 21, 2026</span><span class="txn-amount">₹9,800</span><span class="txn-status paid">Paid</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Kedarkantha Winter Trek</strong> — guide fee</span><span class="txn-date">Aug 12, 2026</span><span class="txn-amount">₹14,200</span><span class="txn-status paid">Paid</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Rishikesh Rafting Batch</strong> — guide fee</span><span class="txn-date">Aug 04, 2026</span><span class="txn-amount">₹7,500</span><span class="txn-status paid">Paid</span></div>
+                                    <div class="txn-row"><span class="txn-desc"><strong>Himalayan High Pass Trek</strong> — advance</span><span class="txn-date">Sep 01, 2026</span><span class="txn-amount">₹6,000</span><span class="txn-status pending-status">Pending</span></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="dash-right">
+
+                        <!-- DUTY CALENDAR -->
+                        <section class="card" id="calendarCard">
+                            <div class="card-head">
+                                <h2 class="card-title">Duty Calendar</h2>
+                                <div class="cal-nav">
+                                    <button class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+                                    <span class="cal-month-label" id="calMonthLabel">September 2026</span>
+                                    <button class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="cal-grid" id="calGrid"></div>
+                                <div class="cal-legend">
+                                    <span class="legend-item"><span class="legend-dot booked"></span> Assigned</span>
+                                    <span class="legend-item"><span class="legend-dot active-rental"></span> On Trek</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- NOTIFICATIONS -->
+                        <section class="card" id="notifsCard" style="margin-top:18px;">
+                            <div class="card-head"><h2 class="card-title">Notifications</h2><a href="#" class="see-all" onclick="navigateTo('notifications'); return false;">View All →</a></div>
+                            <div class="card-content">
+                                <div class="notif-list">
+                                    <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="notif-body"><p><strong>Assignment Confirmed</strong> — Himalayan High Pass Trek (Sep 8–12). Roster locked.</p><span class="notif-time">1 hour ago</span></div></div>
+                                    <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="notif-body"><p><strong>Weather Alert:</strong> Light snowfall expected near the pass. Advise extra layers.</p><span class="notif-time">3 hours ago</span></div></div>
+                                    <div class="notif-item"><div class="notif-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="notif-body"><p><strong>New Booking:</strong> 2 more trekkers joined your Sep 20 Scuba batch.</p><span class="notif-time">1 day ago</span></div></div>
+                                    <div class="notif-item"><div class="notif-icon promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="notif-body"><p><strong>Payout Released:</strong> ₹9,800 credited for Valley of Flowers Trek.</p><span class="notif-time">2 days ago</span></div></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ACTIVITY -->
+                        <section class="card" id="activityCard" style="margin-top:18px;">
+                            <div class="card-head"><h2 class="card-title">Recent Activity</h2></div>
+                            <div class="card-content">
+                                <div class="timeline">
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot orange"></div><div class="timeline-body"><p>Roster locked for <strong>Himalayan High Pass Trek</strong></p><span>Today, 9:00 AM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot green"></div><div class="timeline-body"><p>Payout received — <strong>₹9,800</strong></p><span>Aug 21, 11:30 AM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot navy"></div><div class="timeline-body"><p>Assigned to <strong>Scuba Diving Escape</strong> (Sep 20–22)</p><span>Aug 18, 3:15 PM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot purple"></div><div class="timeline-body"><p>Completed — <strong>Valley of Flowers Trek</strong></p><span>Aug 20, 6:00 PM</span></div></div>
+                                    <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot green"></div><div class="timeline-body"><p>Received a <strong>5★ review</strong> from Ananya S.</p><span>Aug 20, 6:05 PM</span></div></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= MY ASSIGNMENTS ================= -->
+            <section class="page-section" id="page-assignments">
+                <h2 class="page-title">My Assignments</h2>
+                <p class="page-subtitle">Manage your ongoing and completed guiding assignments</p>
+
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">Active Assignments</h2><p class="card-subtitle">Currently assigned or in progress</p></div></div>
+                    <div class="card-content">
+                        <div class="booking-item">
+                            <div class="booking-date-col"><span class="booking-day">02</span><span class="booking-month">SEP</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23111d38'/%3E%3Cpath d='M0 58 L24 26 L44 58 Z' fill='%23FF6B35'/%3E%3Cpath d='M34 58 L58 18 L88 58 Z' fill='%234a6aa5'/%3E%3Ccircle cx='74' cy='15' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Kedarkantha Winter Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info">
+                                <h3 class="booking-name">Kedarkantha Winter Trek</h3>
+                                <div class="booking-meta">
+                                    <span>Sep 1 – Sep 5</span>
+                                    <span>Sankri, Uttarakhand</span>
+                                    <span>9 trekkers</span>
+                                </div>
+                                <div class="booking-tags"><span class="tag confirmed">On Trek</span><span class="tag high-altitude">High Altitude</span></div>
+                            </div>
+                            <div class="booking-price"><span class="price-amount">₹15,000</span><span class="price-dur">3 days left</span></div>
+                        </div>
+
+                        <div class="booking-item">
+                            <div class="booking-date-col orange-date"><span class="booking-day">08</span><span class="booking-month">SEP</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23111d38'/%3E%3Cpath d='M0 60 L26 26 L46 60 Z' fill='%23FF6B35'/%3E%3Cpath d='M32 60 L56 16 L86 60 Z' fill='%234a6aa5'/%3E%3Ccircle cx='74' cy='14' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Himalayan High Pass Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info">
+                                <h3 class="booking-name">Himalayan High Pass Trek</h3>
+                                <div class="booking-meta">
+                                    <span>Sep 8 – Sep 12</span>
+                                    <span>Manali → Leh</span>
+                                    <span>12 trekkers</span>
+                                </div>
+                                <div class="booking-tags"><span class="tag confirmed">Confirmed</span><span class="tag certified">Lead Guide</span></div>
+                            </div>
+                            <div class="booking-price"><span class="price-amount">₹18,500</span><span class="price-dur">starts in 6 days</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-head"><div><h2 class="card-title">Completed Assignments</h2><p class="card-subtitle">Finished expeditions</p></div></div>
+                    <div class="card-content">
+                        <div class="booking-item">
+                            <div class="booking-date-col green-date"><span class="booking-day">20</span><span class="booking-month">AUG</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23d1fae5'/%3E%3Cpath d='M0 56 L26 28 L48 56 Z' fill='%2310b981'/%3E%3Cpath d='M36 56 L60 24 L90 56 Z' fill='%23059669'/%3E%3Ccircle cx='72' cy='16' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Valley of Flowers Trek" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info">
+                                <h3 class="booking-name">Valley of Flowers Trek</h3>
+                                <div class="booking-meta"><span>Aug 18 – Aug 20</span><span>Uttarakhand</span><span>14 trekkers</span></div>
+                                <div class="booking-tags"><span class="tag confirmed">Completed</span><span class="tag trekking">Trekking</span></div>
+                            </div>
+                            <div class="booking-price"><span class="price-amount">₹9,800</span><span class="price-dur">paid out</span></div>
+                        </div>
+                        <div class="booking-item">
+                            <div class="booking-date-col purple-date"><span class="booking-day">12</span><span class="booking-month">AUG</span></div>
+                            <div class="booking-thumb"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='67' viewBox='0 0 90 67'%3E%3Crect width='90' height='67' fill='%23ede9fe'/%3E%3Cpath d='M0 56 L26 28 L48 56 Z' fill='%238b5cf6'/%3E%3Cpath d='M36 56 L60 24 L90 56 Z' fill='%236d28d9'/%3E%3Ccircle cx='72' cy='16' r='7' fill='%23ffcba8'/%3E%3C/svg%3E" alt="Rishikesh Rafting Batch" width="90" height="67" loading="lazy"></div>
+                            <div class="booking-info">
+                                <h3 class="booking-name">Rishikesh Rafting Batch</h3>
+                                <div class="booking-meta"><span>Aug 10 – Aug 12</span><span>Rishikesh</span><span>18 trekkers</span></div>
+                                <div class="booking-tags"><span class="tag confirmed">Completed</span><span class="tag water-sports">Water Sports</span></div>
+                            </div>
+                            <div class="booking-price"><span class="price-amount">₹7,500</span><span class="price-dur">paid out</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= TREKKERS ================= -->
+            <section class="page-section" id="page-trekkers">
+                <h2 class="page-title">Trekkers</h2>
+                <p class="page-subtitle">Roster for your upcoming Himalayan High Pass Trek — Sep 8 to Sep 12</p>
+
+                <div class="payout-grid">
+                    <div class="payout-card"><div class="payout-label">Total Trekkers</div><div class="payout-value">12</div><div class="payout-note">Confirmed on roster</div></div>
+                    <div class="payout-card"><div class="payout-label">Beginners</div><div class="payout-value accent">5</div><div class="payout-note">Need extra briefing</div></div>
+                    <div class="payout-card"><div class="payout-label">Medical Flags</div><div class="payout-value">2</div><div class="payout-note">Carry extra first-aid</div></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">Trekker Roster</h2><p class="card-subtitle">Tap an action to contact a trekker</p></div></div>
+                    <div class="card-content">
+                        <div class="trekker-item">
+                            <div class="trekker-avatar accent">A</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">Ananya Sharma</h3>
+                                <div class="trekker-meta">
+                                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 98765 11223</span>
+                                    <span>Age 27</span>
+                                </div>
+                                <div class="trekker-tags"><span class="tag confirmed">Experienced</span><span class="tag certified">Paid</span></div>
+                            </div>
+                            <div class="trekker-actions">
+                                <button class="action-btn view" title="Call" onclick="showToast('Calling Ananya Sharma…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
+                            </div>
+                        </div>
+
+                        <div class="trekker-item">
+                            <div class="trekker-avatar green">R</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">Rohan Verma</h3>
+                                <div class="trekker-meta">
+                                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 91234 55667</span>
+                                    <span>Age 31</span>
+                                </div>
+                                <div class="trekker-tags"><span class="tag pending">Beginner</span><span class="tag certified">Paid</span></div>
+                            </div>
+                            <div class="trekker-actions">
+                                <button class="action-btn view" title="Call" onclick="showToast('Calling Rohan Verma…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
+                            </div>
+                        </div>
+
+                        <div class="trekker-item">
+                            <div class="trekker-avatar purple">M</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">Meera Iyer</h3>
+                                <div class="trekker-meta">
+                                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 99887 66554</span>
+                                    <span>Age 24</span>
+                                </div>
+                                <div class="trekker-tags"><span class="tag high-altitude">Asthma</span><span class="tag certified">Paid</span></div>
+                            </div>
+                            <div class="trekker-actions">
+                                <button class="action-btn view" title="Call" onclick="showToast('Calling Meera Iyer…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
+                            </div>
+                        </div>
+
+                        <div class="trekker-item">
+                            <div class="trekker-avatar">K</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">Kabir Nair</h3>
+                                <div class="trekker-meta">
+                                    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 90909 12345</span>
+                                    <span>Age 35</span>
+                                </div>
+                                <div class="trekker-tags"><span class="tag confirmed">Experienced</span><span class="tag pending">Payment Pending</span></div>
+                            </div>
+                            <div class="trekker-actions">
+                                <button class="action-btn view" title="Call" onclick="showToast('Calling Kabir Nair…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= SCHEDULE ================= -->
+            <section class="page-section" id="page-schedule">
+                <h2 class="page-title">Duty Schedule</h2>
+                <p class="page-subtitle">Your assigned trekking days and upcoming briefings</p>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2 class="card-title">Monthly Duty Calendar</h2>
+                        <div class="cal-nav">
+                            <button class="cal-btn" id="calPrev2" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+                            <span class="cal-month-label" id="calMonthLabel2">September 2026</span>
+                            <button class="cal-btn" id="calNext2" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="cal-grid" id="calGrid2"></div>
+                        <div class="cal-legend">
+                            <span class="legend-item"><span class="legend-dot booked"></span> Assigned</span>
+                            <span class="legend-item"><span class="legend-dot active-rental"></span> On Trek</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-head"><div><h2 class="card-title">Upcoming Duty Timeline</h2><p class="card-subtitle">Next 30 days</p></div></div>
+                    <div class="card-content">
+                        <div class="timeline">
+                            <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot orange"></div><div class="timeline-body"><p><strong>Sep 5</strong> — Pre-trek briefing call with Himalayan batch</p><span>10:00 AM · Online</span></div></div>
+                            <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot navy"></div><div class="timeline-body"><p><strong>Sep 7</strong> — Gear check &amp; permit collection</p><span>4:00 PM · Manali Base Camp</span></div></div>
+                            <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot green"></div><div class="timeline-body"><p><strong>Sep 8</strong> — Himalayan High Pass Trek departs</p><span>6:00 AM · Manali</span></div></div>
+                            <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot purple"></div><div class="timeline-body"><p><strong>Sep 20</strong> — Scuba Diving Escape begins</p><span>8:00 AM · Port Blair</span></div></div>
+                            <div class="timeline-item"><div class="timeline-line"></div><div class="timeline-dot orange"></div><div class="timeline-body"><p><strong>Oct 5</strong> — Rajasthan Desert Safari begins</p><span>7:00 AM · Jaisalmer</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= EARNINGS ================= -->
+            <section class="page-section" id="page-earnings">
+                <h2 class="page-title">Earnings</h2>
+                <p class="page-subtitle">Your guide payouts and payment history</p>
+
+                <div class="payout-grid">
+                    <div class="payout-card"><div class="payout-label">This Month</div><div class="payout-value accent">₹1,24,500</div><div class="payout-note">+18% vs August</div></div>
+                    <div class="payout-card"><div class="payout-label">Pending Payout</div><div class="payout-value">₹6,000</div><div class="payout-note">Releases Sep 13</div></div>
+                    <div class="payout-card"><div class="payout-label">Lifetime Earnings</div><div class="payout-value">₹8,42,300</div><div class="payout-note">Since Jan 2024</div></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">Payment History</h2><p class="card-subtitle">All guide payouts</p></div></div>
+                    <div class="card-content">
+                        <div class="txn-table">
+                            <div class="txn-row txn-header"><span>Description</span><span>Date</span><span>Amount</span><span>Status</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Valley of Flowers Trek</strong> — guide fee</span><span class="txn-date">Aug 21, 2026</span><span class="txn-amount">₹9,800</span><span class="txn-status paid">Paid</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Kedarkantha Winter Trek</strong> — guide fee</span><span class="txn-date">Aug 12, 2026</span><span class="txn-amount">₹14,200</span><span class="txn-status paid">Paid</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Rishikesh Rafting Batch</strong> — guide fee</span><span class="txn-date">Aug 04, 2026</span><span class="txn-amount">₹7,500</span><span class="txn-status paid">Paid</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Himalayan High Pass Trek</strong> — advance</span><span class="txn-date">Sep 01, 2026</span><span class="txn-amount">₹6,000</span><span class="txn-status pending-status">Pending</span></div>
+                            <div class="txn-row"><span class="txn-desc"><strong>Everest Base Camp</strong> — guide fee</span><span class="txn-date">Jul 28, 2026</span><span class="txn-amount">₹32,000</span><span class="txn-status paid">Paid</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= REVIEWS ================= -->
+            <section class="page-section" id="page-reviews">
+                <h2 class="page-title">Reviews</h2>
+                <p class="page-subtitle">What trekkers say about your guiding</p>
+
+                <div class="payout-grid">
+                    <div class="payout-card"><div class="payout-label">Average Rating</div><div class="payout-value accent">4.9</div><div class="payout-note">Out of 5.0</div></div>
+                    <div class="payout-card"><div class="payout-label">Total Reviews</div><div class="payout-value">128</div><div class="payout-note">Across 42 treks</div></div>
+                    <div class="payout-card"><div class="payout-label">Recommend Rate</div><div class="payout-value">98%</div><div class="payout-note">Would trek again</div></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head"><div><h2 class="card-title">Latest Reviews</h2><p class="card-subtitle">Most recent feedback</p></div></div>
+                    <div class="card-content">
+                        <div class="review-item">
+                            <div class="review-head">
+                                <div class="review-avatar">A</div>
+                                <div>
+                                    <div class="review-name">Ananya Sharma</div>
+                                    <span class="review-trek">Valley of Flowers Trek · Aug 2026</span>
+                                </div>
+                                <div class="stars">
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </div>
+                            </div>
+                            <p class="review-text">"Extremely calm and knowledgeable. Handled the altitude sickness case beautifully and kept the whole group motivated. Would definitely trek with Stackly again!"</p>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-head">
+                                <div class="review-avatar" style="background:linear-gradient(135deg,var(--green-500),#047857)">R</div>
+                                <div>
+                                    <div class="review-name">Rohan Verma</div>
+                                    <span class="review-trek">Kedarkantha Winter Trek · Aug 2026</span>
+                                </div>
+                                <div class="stars">
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg class="off" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </div>
+                            </div>
+                            <p class="review-text">"Great first trek experience. Clear instructions, good pacing and the camp food was surprisingly good. Only wish the briefing had been a bit longer."</p>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-head">
+                                <div class="review-avatar" style="background:linear-gradient(135deg,var(--purple-500),#6d28d9)">M</div>
+                                <div>
+                                    <div class="review-name">Meera Iyer</div>
+                                    <span class="review-trek">Rishikesh Rafting Batch · Aug 2026</span>
+                                </div>
+                                <div class="stars">
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </div>
+                            </div>
+                            <p class="review-text">"Safety first, always. Felt completely looked after on the river. Excellent communication with the whole batch."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= DOCUMENTS ================= -->
+            <section class="page-section" id="page-documents">
+                <h2 class="page-title">Documents</h2>
+                <p class="page-subtitle">Your certifications, permits and guide documents</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="trekker-item">
+                            <div class="trekker-avatar accent">📄</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">Mountaineering Certification (IMF)</h3>
+                                <div class="trekker-meta"><span>Valid till Dec 2028</span><span>Verified</span></div>
+                            </div>
+                            <div class="trekker-actions"><button class="action-btn view" onclick="showToast('Opening document…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                        </div>
+                        <div class="trekker-item">
+                            <div class="trekker-avatar green">📄</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">Wilderness First Aid (WFA)</h3>
+                                <div class="trekker-meta"><span>Valid till Jun 2027</span><span>Verified</span></div>
+                            </div>
+                            <div class="trekker-actions"><button class="action-btn view" onclick="showToast('Opening document…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                        </div>
+                        <div class="trekker-item">
+                            <div class="trekker-avatar purple">📄</div>
+                            <div class="trekker-info">
+                                <h3 class="trekker-name">High Altitude Trek Permit — Ladakh</h3>
+                                <div class="trekker-meta"><span>Expires Sep 30, 2026</span><span>Renewal due</span></div>
+                            </div>
+                            <div class="trekker-actions"><button class="action-btn view" onclick="showToast('Opening document…', 'info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= NOTIFICATIONS ================= -->
+            <section class="page-section" id="page-notifications">
+                <h2 class="page-title">Notifications</h2>
+                <p class="page-subtitle">Stay updated with your assignments and trekkers</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="notif-list">
+                            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="notif-body"><p><strong>Assignment Confirmed</strong> — Himalayan High Pass Trek (Sep 8–12). Roster locked.</p><span class="notif-time">1 hour ago</span></div></div>
+                            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="notif-body"><p><strong>Weather Alert:</strong> Light snowfall expected near the pass. Advise extra layers.</p><span class="notif-time">3 hours ago</span></div></div>
+                            <div class="notif-item"><div class="notif-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="notif-body"><p><strong>New Booking:</strong> 2 more trekkers joined your Sep 20 Scuba batch.</p><span class="notif-time">1 day ago</span></div></div>
+                            <div class="notif-item"><div class="notif-icon promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="notif-body"><p><strong>Payout Released:</strong> ₹9,800 credited for Valley of Flowers Trek.</p><span class="notif-time">2 days ago</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= PROFILE ================= -->
+            <section class="page-section" id="page-profile">
+                <h2 class="page-title">My Profile</h2>
+                <p class="page-subtitle">Manage your guide information</p>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="profile-row" style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;padding:20px 0;">
+                            <img id="profileAvatar" class="profile-avatar" src="" alt="Guide" style="width:100px;height:100px;border-radius:50%;border:3px solid #FF6B35;object-fit:cover;">
+                            <div>
+                                <h3 style="font-size:1.3rem;font-weight:700;color:var(--navy-900);" id="profileName">Guide</h3>
+                                <p style="color:var(--gray-500);margin-top:4px;" id="profileEmail">guide@stackly.com</p>
+                                <p style="color:var(--gray-500);margin-top:4px;" id="profilePhone">+91 98765 43210</p>
+                                <span class="sidebar-badge" style="margin-top:8px;">Certified Guide</span>
+                            </div>
+                        </div>
+
+                        <div style="border-top:1px solid var(--gray-100);padding-top:18px;margin-top:6px;">
+                            <div class="payout-label" style="margin-bottom:10px;">Guide Profile Completion</div>
+                            <div class="progress-track"><div class="progress-fill" style="width:86%;"></div></div>
+                            <p style="font-size:.75rem;color:var(--gray-500);margin-top:8px;">86% complete — add your updated High Altitude permit to reach 100%.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="dash-footer" id="dashFooter">
+            <p>&copy; 2026 Stackly Adventure Tourism. All rights reserved.</p>
+            <div class="footer-links"><a href="404.html" id="footerHelp">Help Center</a><a href="404.html" id="footerPrivacy">Privacy</a><a href="404.html" id="footerTerms">Terms</a></div>
+        </footer>
+    </main>
+
+    <script>
+        /* ============================================================
+           SIDEBAR TOGGLE
+           ============================================================ */
+        const sidebar  = document.getElementById('sidebar');
+        const overlay  = document.getElementById('sidebarOverlay');
+        const hamburger= document.getElementById('hamburgerBtn');
+        const closeBtn = document.getElementById('sidebarClose');
+
+        function openSidebar(){
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSidebar(){
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', openSidebar);
+        closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+        window.addEventListener('resize', () => { if(window.innerWidth > 1024) closeSidebar(); });
+
+        /* ============================================================
+           LOGOUT
+           ============================================================ */
+        function logoutGuide(){
+            [
+                'stacklyGuideName','stacklyGuideEmail','stacklyGuidePhone',
+                'stacklyUserName','stacklyUserEmail','stacklyUserPhone',
+                'loggedInUserEmail','loggedInUserName','loggedInUserPhone',
+                'vrUserEmail','vrUserName'
+            ].forEach(k => localStorage.removeItem(k));
+            window.location.href = 'login.html';
+        }
+
+        const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+        if (headerLogoutBtn) headerLogoutBtn.addEventListener('click', logoutGuide);
+
+        /* ============================================================
+           USER DATA
+           ============================================================ */
+        function getUserName(){
+            return localStorage.getItem('stacklyGuideName')
+                || localStorage.getItem('stacklyUserName')
+                || localStorage.getItem('loggedInUserName')
+                || localStorage.getItem('vrUserName')
+                || 'Guide';
+        }
+        function getUserEmail(){
+            return localStorage.getItem('stacklyGuideEmail')
+                || localStorage.getItem('stacklyUserEmail')
+                || localStorage.getItem('loggedInUserEmail')
+                || localStorage.getItem('vrUserEmail')
+                || 'guide@stackly.com';
+        }
+        function getUserPhone(){
+            return localStorage.getItem('stacklyGuidePhone')
+                || localStorage.getItem('stacklyUserPhone')
+                || localStorage.getItem('loggedInUserPhone')
+                || '+91 98765 43210';
+        }
+        function getInitial(){
+            return (getUserName().trim().charAt(0) || 'G').toUpperCase();
+        }
+
+        function updateUserInfo(){
+            const userName    = getUserName();
+            const userEmail   = getUserEmail();
+            const userPhone   = getUserPhone();
+            const userInitial = getInitial();
+
+            const sidebarUsername = document.getElementById('sidebarUsername');
+            const sidebarAvatar   = document.getElementById('sidebarAvatar');
+            const greetingName    = document.getElementById('greetingName');
+            const topbarAvatar    = document.getElementById('topbarAvatar');
+            const profileName     = document.getElementById('profileName');
+            const profileEmail    = document.getElementById('profileEmail');
+            const profilePhone    = document.getElementById('profilePhone');
+            const profileAvatar   = document.getElementById('profileAvatar');
+
+            if (sidebarUsername) sidebarUsername.textContent = userName;
+            if (greetingName)    greetingName.textContent    = userName.split(' ')[0];
+            if (profileName)     profileName.textContent     = userName;
+            if (profileEmail)    profileEmail.textContent    = userEmail;
+            if (profilePhone)    profilePhone.textContent    = userPhone;
+
+            const avatarSVG = (size, fontSize) =>
+                `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 ${size} ${size}'%3E%3Crect width='${size}' height='${size}' rx='${size/2}' fill='%23FF6B35'/%3E%3Ctext x='${size/2}' y='${size*0.66}' font-family='Outfit,Arial' font-size='${fontSize}' fill='white' text-anchor='middle' font-weight='bold'%3E${userInitial}%3C/text%3E%3C/svg%3E`;
+
+            if (sidebarAvatar) { sidebarAvatar.src = avatarSVG(48, 22);  sidebarAvatar.alt = userName; }
+            if (topbarAvatar)  { topbarAvatar.src  = avatarSVG(36, 16);  topbarAvatar.alt  = userName; }
+            if (profileAvatar) { profileAvatar.src= avatarSVG(100, 42); profileAvatar.alt= userName; }
+        }
+
+        /* ============================================================
+           PAGE NAVIGATION
+           ============================================================ */
+        const pageNames = {
+            'dashboard'   : 'Dashboard',
+            'assignments' : 'My Assignments',
+            'trekkers'    : 'Trekkers',
+            'schedule'    : 'Duty Schedule',
+            'earnings'    : 'Earnings',
+            'reviews'     : 'Reviews',
+            'documents'   : 'Documents',
+            'notifications':'Notifications',
+            'profile'     : 'My Profile'
+        };
+
+        function greetingWord(){
+            const h = new Date().getHours();
+            if (h < 12) return 'Good Morning';
+            if (h < 17) return 'Good Afternoon';
+            return 'Good Evening';
+        }
+
+        function navigateTo(pageId){
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('page-' + pageId);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+                item.classList.toggle('active', item.dataset.page === pageId);
+            });
+
+            const greetingTitle = document.getElementById('greetingTitle');
+            if (pageId === 'dashboard') {
+                greetingTitle.innerHTML = `${greetingWord()}, <span class="text-accent">${getUserName().split(' ')[0]}</span>`;
+            } else {
+                greetingTitle.textContent = pageNames[pageId] || 'Dashboard';
+            }
+
+            if (window.innerWidth <= 1024) closeSidebar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ============================================================
+           DYNAMIC GREETING
+           ============================================================ */
+        (function initGreeting(){
+            const greetingTitle = document.getElementById('greetingTitle');
+            const greetingSub   = document.getElementById('greetingSub');
+            const now = new Date();
+            greetingTitle.innerHTML = `${greetingWord()}, <span class="text-accent">${getUserName().split(' ')[0]}</span>`;
+            greetingSub.textContent = now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        })();
+
+        /* ============================================================
+           STAT COUNTER ANIMATION
+           ============================================================ */
+        const statNums = document.querySelectorAll('.stat-num');
+
+        function animateNum(el, target, decimals, prefix){
+            const duration = target > 1000 ? 2000 : 1300;
+            const start = performance.now();
+            function step(ts){
+                const progress = Math.min((ts - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const val = eased * target;
+                let text;
+                if (decimals > 0) {
+                    text = val.toFixed(decimals);
+                } else if (target > 1000) {
+                    text = Math.round(val).toLocaleString('en-IN');
+                } else {
+                    text = Math.round(val);
+                }
+                el.textContent = (prefix || '') + text;
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        const statObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting){
+                    const el = entry.target;
+                    const target   = parseFloat(el.getAttribute('data-target')) || 0;
+                    const decimals = parseInt(el.getAttribute('data-decimal') || '0', 10);
+                    const prefix   = el.getAttribute('data-prefix') || '';
+                    animateNum(el, target, decimals, prefix);
+                    statObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.4 });
+
+        statNums.forEach(n => statObserver.observe(n));
+
+        /* ============================================================
+           CALENDAR (dashboard + schedule page)
+           ============================================================ */
+        const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const dayNames   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+        // Assigned duty days & on-trek days
+        const dutyDays = { '2026-9':[8,9,10,11,12], '2026-10':[5,6,7,8,9,10] };
+        const onTrek   = { '2026-9':[1,2,3,4,5] };
+
+        function buildCalendar(gridEl, labelEl, m, y){
+            if (!gridEl) return;
+            gridEl.innerHTML = '';
+            if (labelEl) labelEl.textContent = `${monthNames[m]} ${y}`;
+
+            dayNames.forEach(d => {
+                const h = document.createElement('div');
+                h.className = 'cal-hdr';
+                h.textContent = d;
+                gridEl.appendChild(h);
+            });
+
+            const firstDay    = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            const prevDays    = new Date(y, m, 0).getDate();
+            const today       = new Date();
+            const key         = `${y}-${m + 1}`;
+            const dDays       = dutyDays[key] || [];
+            const tDays       = onTrek[key]   || [];
+
+            for (let i = firstDay - 1; i >= 0; i--){
+                const d = document.createElement('div');
+                d.className = 'cal-day other';
+                d.textContent = prevDays - i;
+                gridEl.appendChild(d);
+            }
+
+            for (let d = 1; d <= daysInMonth; d++){
+                const el = document.createElement('div');
+                el.className = 'cal-day';
+                if (d === today.getDate() && m === today.getMonth() && y === today.getFullYear()){
+                    el.classList.add('today');
+                }
+                if (dDays.includes(d)) el.classList.add('booked');
+                if (tDays.includes(d)) el.classList.add('active-day');
+                el.textContent = d;
+                gridEl.appendChild(el);
+            }
+
+            const remaining = 42 - gridEl.children.length;
+            for (let i = 1; i <= remaining; i++){
+                const d = document.createElement('div');
+                d.className = 'cal-day other';
+                d.textContent = i;
+                gridEl.appendChild(d);
+            }
+        }
+
+        // Dashboard calendar
+        let dMonth = 8, dYear = 2026;
+        const calGrid        = document.getElementById('calGrid');
+        const calMonthLabel  = document.getElementById('calMonthLabel');
+
+        function renderDashCal(){ buildCalendar(calGrid, calMonthLabel, dMonth, dYear); }
+
+        const calPrev = document.getElementById('calPrev');
+        const calNext = document.getElementById('calNext');
+        if (calPrev) calPrev.addEventListener('click', () => {
+            dMonth--; if (dMonth < 0){ dMonth = 11; dYear--; }
+            renderDashCal();
+        });
+        if (calNext) calNext.addEventListener('click', () => {
+            dMonth++; if (dMonth > 11){ dMonth = 0; dYear++; }
+            renderDashCal();
+        });
+        renderDashCal();
+
+        // Schedule page calendar (shares the same month state)
+        const calGrid2       = document.getElementById('calGrid2');
+        const calMonthLabel2 = document.getElementById('calMonthLabel2');
+
+        function renderScheduleCal(){ buildCalendar(calGrid2, calMonthLabel2, dMonth, dYear); }
+
+        const calPrev2 = document.getElementById('calPrev2');
+        const calNext2 = document.getElementById('calNext2');
+        if (calPrev2) calPrev2.addEventListener('click', () => {
+            dMonth--; if (dMonth < 0){ dMonth = 11; dYear--; }
+            renderDashCal(); renderScheduleCal();
+        });
+        if (calNext2) calNext2.addEventListener('click', () => {
+            dMonth++; if (dMonth > 11){ dMonth = 0; dYear++; }
+            renderDashCal(); renderScheduleCal();
+        });
+        renderScheduleCal();
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        function showToast(message, type = 'info'){
+            const existing = document.querySelector('.toast-msg');
+            if (existing) existing.remove();
+
+            const colors = { success:'#10b981', warning:'#f59e0b', error:'#ef4444', info:'#FF6B35' };
+            const icons  = { success:'✓', warning:'⚠', error:'✕', info:'ℹ' };
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg';
+            Object.assign(toast.style, {
+                position:'fixed',
+                bottom:'calc(20px + env(safe-area-inset-bottom))',
+                left:'16px',
+                right:'16px',
+                background: colors[type] || colors.info,
+                color:'#fff',
+                padding:'13px 18px',
+                borderRadius:'12px',
+                boxShadow:'0 8px 24px rgba(0,0,0,.22)',
+                zIndex:'10000',
+                display:'flex',
+                alignItems:'center',
+                gap:'10px',
+                fontSize:'.84rem',
+                fontWeight:'500',
+                fontFamily:'Outfit, sans-serif',
+                transform:'translateY(90px)',
+                opacity:'0',
+                transition:'all .4s cubic-bezier(.4,0,.2,1)',
+                maxWidth:'480px',
+                margin:'0 auto'
+            });
+            toast.innerHTML = `<span style="font-weight:800;flex-shrink:0">${icons[type] || 'ℹ'}</span><span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.style.transform = 'translateY(0)';
+                toast.style.opacity = '1';
+            });
+            setTimeout(() => {
+                toast.style.transform = 'translateY(90px)';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 420);
+            }, 3200);
+        }
+
+        /* ============================================================
+           ASSIGNMENT FILTER (visual only)
+           ============================================================ */
+        const assignmentFilter = document.getElementById('assignmentFilter');
+        if (assignmentFilter){
+            assignmentFilter.addEventListener('change', e => {
+                showToast(`Filter: ${e.target.options[e.target.selectedIndex].text}`, 'info');
+            });
+        }
+
+        /* ============================================================
+           INIT
+           ============================================================ */
+        document.addEventListener('DOMContentLoaded', updateUserInfo);
+        updateUserInfo();
+
+        /* Guard: require a logged-in guide */
+        if (!localStorage.getItem('stacklyGuideEmail')
+            && !localStorage.getItem('stacklyUserEmail')
+            && !localStorage.getItem('loggedInUserEmail')
+            && !localStorage.getItem('vrUserEmail')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
